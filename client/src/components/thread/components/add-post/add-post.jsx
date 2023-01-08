@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import { useCallback, useState, useAppForm } from 'hooks/hooks.js';
 import { ButtonColor, ButtonType, IconName, PostPayloadKey } from 'common/enums/enums.js';
-import { Button, Image, Input, Segment } from 'components/common/common.js';
+import { Button, Image, Input, Segment, Message } from 'components/common/common.js';
+import { useCallback, useState, useAppForm } from 'hooks/hooks.js';
 import { DEFAULT_ADD_POST_PAYLOAD } from './common/constants.js';
 
 import styles from './styles.module.scss';
@@ -9,6 +9,7 @@ import styles from './styles.module.scss';
 const AddPost = ({ onPostAdd, onUploadImage }) => {
   const [image, setImage] = useState(undefined);
   const [isUploading, setIsUploading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const { control, handleSubmit, reset } = useAppForm({
     defaultValues: DEFAULT_ADD_POST_PAYLOAD
@@ -36,7 +37,7 @@ const AddPost = ({ onPostAdd, onUploadImage }) => {
         setImage({ imageId, imageLink });
       })
       .catch(() => {
-        // TODO: show error
+        setErrorMessage('Error while uploading image');
       })
       .finally(() => {
         setIsUploading(false);
@@ -46,6 +47,12 @@ const AddPost = ({ onPostAdd, onUploadImage }) => {
   return (
     <Segment>
       <form onSubmit={handleSubmit(handleAddPost)}>
+        {Boolean(errorMessage) && (
+          <Message>
+            <p>{errorMessage}</p>
+          </Message>
+        )}
+
         <Input
           name={PostPayloadKey.BODY}
           placeholder="What is the news?"

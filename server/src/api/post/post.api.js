@@ -33,6 +33,15 @@ const initPost = (fastify, opts, done) => {
   });
   fastify.route({
     method: HttpMethod.PUT,
+    url: PostsApiPath.$ID,
+    [ControllerHook.HANDLER]: async req => {
+      const post = await postService.updatePost(req.params.id, req.body);
+
+      return post;
+    }
+  });
+  fastify.route({
+    method: HttpMethod.PUT,
     url: PostsApiPath.REACT,
     [ControllerHook.HANDLER]: async req => {
       const reaction = await postService.setReaction(req.user.id, req.body);

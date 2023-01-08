@@ -1,0 +1,28 @@
+.buttons {
+  display: flex;
+
+  & button + button {
+    margin-left: 0.5rem;
+  }
+}
+
+.imageWrapper {
+  margin-bottom: 10px;
+}
+
+.image {
+  width: auto;
+  max-width: 400px;
+  max-height: 400px;
+  margin: 0 auto;
+}
+
+.btnWrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btnImgLabel {
+  margin: 0 0 0 10px;
+  cursor: pointer;
+}

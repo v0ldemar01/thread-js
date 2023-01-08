@@ -15,6 +15,7 @@ import { ExpandedPost, SharedPostLink, AddPost } from './components/components.j
 import { DEFAULT_THREAD_TOOLBAR } from './common/constants.js';
 
 import styles from './styles.module.scss';
+import { UpdatePost } from './components/update-post/update-post.jsx';
 
 const postsFilter = {
   userId: undefined,
@@ -30,7 +31,8 @@ const Thread = () => {
     expandedPost: state.posts.expandedPost,
     userId: state.profile.user.id
   }));
-  const [sharedPostId, setSharedPostId] = useState(undefined);
+  const [sharedPostId, setSharedPostId] = useState(null);
+  const [editingPostId, setEditingPostId] = useState(null);
 
   const { control, watch } = useAppForm({
     defaultValues: DEFAULT_THREAD_TOOLBAR,
@@ -77,6 +79,11 @@ const Thread = () => {
     [dispatch]
   );
 
+  const handlePostUpdate = useCallback(
+    postPayload => dispatch(threadActionCreator.updatePost(postPayload)),
+    [dispatch]
+  );
+
   const handleMorePostsLoad = useCallback(
     filtersPayload => {
       dispatch(threadActionCreator.loadMorePosts(filtersPayload));
@@ -91,6 +98,10 @@ const Thread = () => {
   }, [handleMorePostsLoad]);
 
   const handleSharePost = id => setSharedPostId(id);
+
+  const handleEditingPost = id => setEditingPostId(id);
+
+  const handleCloseEditingPost = () => setEditingPostId(null);
 
   const handleUploadImage = file => imageService.uploadImage(file);
 
@@ -122,14 +133,25 @@ const Thread = () => {
         loader={<Spinner key="0" />}
       >
         {posts.map(post => (
-          <Post
-            post={post}
-            onPostLike={handlePostLike}
-            onPostDislike={handlePostDislike}
-            onExpandedPostToggle={handleExpandedPostToggle}
-            onSharePost={handleSharePost}
-            key={post.id}
-          />
+          post.id === editingPostId ? (
+            <UpdatePost
+              post={post}
+              onPostUpdate={handlePostUpdate}
+              onClose={handleCloseEditingPost}
+              onUploadImage={handleUploadImage}
+            />
+          ) : (
+            <Post
+              post={post}
+              isOwnPost={post.userId === userId}
+              onPostLike={handlePostLike}
+              onPostDislike={handlePostDislike}
+              onExpandedPostToggle={handleExpandedPostToggle}
+              onSharePost={handleSharePost}
+              onEditingPost={handleEditingPost}
+              key={post.id}
+            />
+          )
         ))}
       </InfiniteScroll>
       {expandedPost && <ExpandedPost onSharePost={handleSharePost} />}

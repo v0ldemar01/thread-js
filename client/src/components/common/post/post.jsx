@@ -9,8 +9,10 @@ import styles from './styles.module.scss';
 
 const Post = ({
   post,
+  isOwnPost,
   onPostLike,
   onExpandedPostToggle,
+  onEditingPost,
   onPostDislike,
   onSharePost
 }) => {
@@ -29,6 +31,7 @@ const Post = ({
   const handlePostLike = () => onPostLike(id);
   const handlePostDislike = () => onPostDislike(id);
   const handleExpandedPostToggle = () => onExpandedPostToggle(id);
+  const handleEditingPost = () => onEditingPost(id);
   const handleSharePost = () => onSharePost(id);
 
   return (
@@ -38,6 +41,14 @@ const Post = ({
         <div className={styles.meta}>
           <span>{`posted by ${user.username} - ${date}`}</span>
         </div>
+        {isOwnPost && (
+          <div className={styles.actions}>
+            <IconButton
+              iconName={IconName.EDIT}
+              onClick={handleEditingPost}
+            />
+          </div>
+        )}
         <p className={styles.description}>{body}</p>
       </div>
       <div className={styles.extra}>
@@ -67,9 +78,11 @@ const Post = ({
 
 Post.propTypes = {
   post: postType.isRequired,
+  isOwnPost: PropTypes.bool.isRequired,
   onPostLike: PropTypes.func.isRequired,
   onPostDislike: PropTypes.func.isRequired,
   onExpandedPostToggle: PropTypes.func.isRequired,
+  onEditingPost: PropTypes.func.isRequired,
   onSharePost: PropTypes.func.isRequired
 };
 

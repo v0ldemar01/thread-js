@@ -6,6 +6,7 @@ import {
   likePost,
   addComment,
   applyPost,
+  updatePost,
   createPost,
   dislikePost,
   likePostFromSocket,
@@ -38,6 +39,15 @@ const reducer = createReducer(initialState, builder => {
     const { post } = action.payload;
 
     state.expandedPost = post;
+  });
+  builder.addCase(updatePost.fulfilled, (state, action) => {
+    const { newPost } = action.payload;
+    state.posts = state.posts.map(statePost => (statePost.id === newPost.id ? {
+      ...statePost, ...newPost
+    } : statePost));
+    if (state.expandedPost?.id === newPost.id) {
+      state.expandedPost = { ...state.expandedPost, ...newPost };
+    }
   });
   builder.addMatcher(
     isAnyOf(

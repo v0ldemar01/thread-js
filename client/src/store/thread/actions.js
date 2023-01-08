@@ -47,6 +47,14 @@ const createPost = createAsyncThunk(
   }
 );
 
+const updatePost = createAsyncThunk(
+  ActionType.UPDATE_POST,
+  async (post, { extra: { services } }) => {
+    const newPost = await services.post.updatePost(post, post.id);
+    return { newPost };
+  }
+);
+
 const toggleExpandedPost = createAsyncThunk(
   ActionType.SET_EXPANDED_POST,
   async (postId, { extra: { services } }) => {
@@ -159,5 +167,6 @@ export {
   dislikePost,
   addComment,
   likePostFromSocket,
+  updatePost,
   dislikePostFromSocket
 };

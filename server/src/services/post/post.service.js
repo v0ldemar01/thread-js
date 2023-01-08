@@ -20,6 +20,10 @@ class Post {
     });
   }
 
+  updatePost(postId, post) {
+    return this._postRepository.updateById(postId, { ...post });
+  }
+
   async setReaction(userId, { postId, isLike = true }) {
     let action;
     const updateOrDelete = react => (react.isLike === isLike

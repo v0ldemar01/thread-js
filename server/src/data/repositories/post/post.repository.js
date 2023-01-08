@@ -54,6 +54,12 @@ class Post extends Abstract {
       .where({ id })
       .first();
   }
+
+  updateById(id, { imageId, body }) {
+    return this.model
+      .query()
+      .patchAndFetchById(id, { imageId, body });
+  }
 }
 
 export { Post };

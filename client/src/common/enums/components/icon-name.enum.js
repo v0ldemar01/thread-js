@@ -11,6 +11,7 @@ const IconName = {
   THUMBS_UP: 'thumbs up',
   THUMBS_DOWN: 'thumbs down',
   USER: 'user',
+  EDIT: 'edit',
   USER_CIRCLE: 'user circle'
 };
 
