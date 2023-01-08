@@ -27,17 +27,18 @@ class Post {
 
     const reaction = await this._postReactionRepository.getPostReaction(
       userId,
-      postId
+      postId,
+      isLike
     );
 
-    const result = reaction
-      ? await updateOrDelete(reaction)
-      : await this._postReactionRepository.create({ userId, postId, isLike });
+    if (reaction) {
+      await updateOrDelete(reaction);
+    } else {
+      await this._postReactionRepository.create({ userId, postId, isLike });
+    }
 
     // the result is an integer when an entity is deleted
-    return Number.isInteger(result)
-      ? {}
-      : this._postReactionRepository.getPostReaction(userId, postId);
+    return this._postRepository.getPostReactsById(postId);
   }
 }
 

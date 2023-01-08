@@ -41,6 +41,17 @@ class Post extends Abstract {
       .withGraphFetched('[comments.user.image, user.image, image]')
       .first();
   }
+
+  getPostReactsById(id) {
+    return this.model
+      .query()
+      .select(
+        getReactionsQuery(this.model)(true),
+        getReactionsQuery(this.model)(false)
+      )
+      .where({ id })
+      .first();
+  }
 }
 
 export { Post };
