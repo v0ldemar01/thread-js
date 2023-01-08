@@ -13,10 +13,21 @@ const notificationSocketInstance = socket.getInstance(SocketNamespace.NOTIFICATI
 const notificationSocket = ({ dispatch }) => {
   notificationSocketInstance.on(
     NotificationSocketEvent.LIKE_POST,
-    () => {
+    post => {
+      dispatch(threadActionCreator.likePostFromSocket(post));
       dispatch(appActionCreator.notify({
         type: NotificationType.INFO,
         message: NotificationMessage.LIKED_POST
+      }));
+    }
+  );
+  notificationSocketInstance.on(
+    NotificationSocketEvent.DISLIKE_POST,
+    post => {
+      dispatch(threadActionCreator.dislikePostFromSocket(post));
+      dispatch(appActionCreator.notify({
+        type: NotificationType.INFO,
+        message: NotificationMessage.DISLIKED_POST
       }));
     }
   );

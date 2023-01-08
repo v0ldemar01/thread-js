@@ -42,10 +42,12 @@ class Post extends Abstract {
       .first();
   }
 
-  getPostReactsById(id) {
+  getPostByIdWithUserAndReactions(id) {
     return this.model
       .query()
       .select(
+        'id',
+        'userId',
         getReactionsQuery(this.model)(true),
         getReactionsQuery(this.model)(false)
       )

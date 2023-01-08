@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 class Post {
   constructor({ postRepository, postReactionRepository }) {
     this._postRepository = postRepository;
@@ -20,10 +21,10 @@ class Post {
   }
 
   async setReaction(userId, { postId, isLike = true }) {
-    // define the callback for future use as a promise
+    let action;
     const updateOrDelete = react => (react.isLike === isLike
-      ? this._postReactionRepository.deleteById(react.id)
-      : this._postReactionRepository.updateById(react.id, { isLike }));
+      ? (action = 'remove', this._postReactionRepository.deleteById(react.id))
+      : (action = 'add', this._postReactionRepository.updateById(react.id, { isLike })));
 
     const reaction = await this._postReactionRepository.getPostReaction(
       userId,
@@ -35,10 +36,12 @@ class Post {
       await updateOrDelete(reaction);
     } else {
       await this._postReactionRepository.create({ userId, postId, isLike });
+      action = 'add';
     }
 
-    // the result is an integer when an entity is deleted
-    return this._postRepository.getPostReactsById(postId);
+    const updatedPost = await this._postRepository.getPostByIdWithUserAndReactions(postId);
+
+    return { ...updatedPost, action };
   }
 }
 

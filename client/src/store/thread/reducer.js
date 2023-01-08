@@ -7,7 +7,9 @@ import {
   addComment,
   applyPost,
   createPost,
-  dislikePost
+  dislikePost,
+  likePostFromSocket,
+  dislikePostFromSocket
 } from './actions.js';
 
 const initialState = {
@@ -38,7 +40,13 @@ const reducer = createReducer(initialState, builder => {
     state.expandedPost = post;
   });
   builder.addMatcher(
-    isAnyOf(likePost.fulfilled, dislikePost.fulfilled, addComment.fulfilled),
+    isAnyOf(
+      likePost.fulfilled,
+      dislikePost.fulfilled,
+      likePostFromSocket.fulfilled,
+      dislikePostFromSocket.fulfilled,
+      addComment.fulfilled
+    ),
     (state, action) => {
       const { posts, expandedPost } = action.payload;
       state.posts = posts;

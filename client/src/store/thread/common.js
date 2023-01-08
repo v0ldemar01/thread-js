@@ -4,6 +4,7 @@ const ActionType = {
   SET_ALL_POSTS: 'thread/set-all-posts',
   SET_EXPANDED_POST: 'thread/set-expanded-post',
   REACT: 'thread/react',
+  REACT_FROM_SOCKET: 'thread/react-from-socket',
   COMMENT: 'thread/comment'
 };
 
