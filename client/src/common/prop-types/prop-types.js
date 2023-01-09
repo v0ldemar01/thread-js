@@ -3,3 +3,4 @@ export { postType } from './post.js';
 export { imageType } from './image.js';
 export { commentType } from './comment.js';
 export { locationType } from './location.js';
+export { postReactionType } from './post-reaction.js';

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { getFromNowTime } from 'helpers/helpers';
 import { IconName } from 'common/enums/enums';
 import { postType } from 'common/prop-types/prop-types';
-import { IconButton, Image } from 'components/common/common';
+import { IconButton, Image, Tooltip, UserReaction } from 'components/common/common';
 
 import styles from './styles.module.scss';
 
@@ -22,8 +22,8 @@ const Post = ({
     image,
     body,
     user,
-    likeCount,
-    dislikeCount,
+    likes,
+    dislikes,
     commentCount,
     createdAt
   } = post;
@@ -58,16 +58,30 @@ const Post = ({
         <p className={styles.description}>{body}</p>
       </div>
       <div className={styles.extra}>
-        <IconButton
-          iconName={IconName.THUMBS_UP}
-          label={likeCount}
-          onClick={handlePostLike}
-        />
-        <IconButton
-          iconName={IconName.THUMBS_DOWN}
-          label={dislikeCount}
-          onClick={handlePostDislike}
-        />
+        <Tooltip
+          content={likes.length ? likes.map(({ user: userReaction }) => (
+            <UserReaction user={userReaction} />
+          )) : 'No likes yet'}
+          direction="top"
+        >
+          <IconButton
+            iconName={IconName.THUMBS_UP}
+            label={likes?.length}
+            onClick={handlePostLike}
+          />
+        </Tooltip>
+        <Tooltip
+          content={dislikes.length ? dislikes.map(({ user: userReaction }) => (
+            <UserReaction user={userReaction} />
+          )) : 'No dislikes'}
+          direction="top"
+        >
+          <IconButton
+            iconName={IconName.THUMBS_DOWN}
+            label={dislikes?.length}
+            onClick={handlePostDislike}
+          />
+        </Tooltip>
         <IconButton
           iconName={IconName.COMMENT}
           label={commentCount}

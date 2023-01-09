@@ -75,11 +75,11 @@ const toggleExpandedPost = createAsyncThunk(
 const reactPost = (isLike = true) => async (postId, { getState, extra: { services } }) => {
   const mode = `${!isLike ? 'dis' : ''}like`;
 
-  const { likeCount, dislikeCount } = await services.post[`${mode}Post`](postId);
+  const { likes, dislikes } = await services.post[`${mode}Post`](postId);
   const mapLikesOrDislikes = post => ({
     ...post,
-    likeCount,
-    dislikeCount
+    likes,
+    dislikes
   });
 
   const {
@@ -107,13 +107,13 @@ const dislikePost = createAsyncThunk(
 
 const reactPostFromSocket = async ({
   id: postId,
-  likeCount,
-  dislikeCount
+  likes,
+  dislikes
 }, { getState }) => {
   const mapLikesOrDislikes = post => ({
     ...post,
-    likeCount,
-    dislikeCount
+    likes,
+    dislikes
   });
 
   const {

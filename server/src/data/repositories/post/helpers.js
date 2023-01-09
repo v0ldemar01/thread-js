@@ -19,9 +19,12 @@ const getWhereUserIdByModeQuery = (userId, userMode) => builder => {
   }
   if (userMode === 'likedByOwn' && userId) {
     builder
-      .where('postReactions.isLike', true)
-      .where('postReactions.userId', userId);
+      .where('likes.userId', userId);
   }
 };
 
-export { getCommentsCountQuery, getReactionsQuery, getWhereUserIdByModeQuery };
+export {
+  getWhereUserIdByModeQuery,
+  getCommentsCountQuery,
+  getReactionsQuery
+};

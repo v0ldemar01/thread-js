@@ -1,9 +1,7 @@
-/* eslint-disable no-underscore-dangle */
 import { Abstract } from '../abstract/abstract.repository.js';
 import {
   getCommentsCountQuery,
-  getWhereUserIdByModeQuery,
-  getReactionsQuery as getPostReactionsQuery
+  getWhereUserIdByModeQuery
 } from './helpers.js';
 import {
   getReactionsQuery as getCommentReactionsQuery
@@ -21,14 +19,16 @@ class Post extends Abstract {
       .query()
       .select(
         'posts.*',
-        getCommentsCountQuery(this.model),
-        getPostReactionsQuery(this.model)(true),
-        getPostReactionsQuery(this.model)(false)
+        getCommentsCountQuery(this.model)
       )
       .whereNull('deletedAt')
       .where(getWhereUserIdByModeQuery(userId, userMode))
-      .joinRelated('postReactions')
-      .withGraphJoined('[image, user.image]')
+      .withGraphJoined(`[
+        image,
+        user.image,
+        postReactions(withLikes) as likes .[user],
+        postReactions(withDislikes) as dislikes .[user]
+      ]`)
       .orderBy('createdAt', 'desc')
       .offset(offset)
       .limit(limit);
@@ -39,12 +39,16 @@ class Post extends Abstract {
       .query()
       .select(
         'posts.*',
-        getCommentsCountQuery(this.model),
-        getPostReactionsQuery(this.model)(true),
-        getPostReactionsQuery(this.model)(false)
+        getCommentsCountQuery(this.model)
       )
       .where({ id })
-      .withGraphFetched('[comments(onlyNotDeleted).user.image, user.image, image]')
+      .withGraphFetched(`[
+        image,
+        user.image,
+        comments(onlyNotDeleted).user.image,
+        postReactions(withLikes) as likes .[user],
+        postReactions(withDislikes) as dislikes .[user]
+      ]`)
       .modifiers({
         onlyNotDeleted(builder) {
           builder.whereNull('deletedAt');
@@ -64,12 +68,13 @@ class Post extends Abstract {
     return this.model
       .query()
       .select(
-        'id',
-        'userId',
-        getPostReactionsQuery(this.model)(true),
-        getPostReactionsQuery(this.model)(false)
+        'posts.id'
       )
-      .where({ id })
+      .where('posts.id', id)
+      .withGraphJoined(`[
+        postReactions(withLikes) as likes .[user],
+        postReactions(withDislikes) as dislikes .[user]
+      ]`)
       .first();
   }
 

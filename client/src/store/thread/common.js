@@ -1,5 +1,6 @@
 const ActionType = {
   ADD_POST: 'thread/add-post',
+  REACT_POST: 'thread/react-post',
   UPDATE_POST: 'thread/update-post',
   DELETE_POST: 'thread/delete-post',
   ADD_COMMENT: 'thread/add-comment',

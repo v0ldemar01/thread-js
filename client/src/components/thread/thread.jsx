@@ -174,37 +174,39 @@ const Thread = () => {
           />
         </div>
       </form>
-      <InfiniteScroll
-        dataLength={posts.length}
-        next={handleGetMorePosts}
-        scrollThreshold={0.8}
-        hasMore={hasMorePosts}
-        loader={<Spinner key="0" />}
-      >
-        {posts.map(post => (
-          post.id === editingPostId ? (
-            <UpdatePost
-              key={post.id}
-              post={post}
-              onPostUpdate={handlePostUpdate}
-              onClose={handleCloseEditingPost}
-              onUploadImage={handleUploadImage}
-            />
-          ) : (
-            <Post
-              post={post}
-              isOwnPost={post.userId === userId}
-              onPostLike={handlePostLike}
-              onPostDislike={handlePostDislike}
-              onExpandedPostToggle={handleExpandedPostToggle}
-              onSharePost={handleSharePost}
-              onDeletePost={handlePostDelete}
-              onEditingPost={handleEditingPost}
-              key={post.id}
-            />
-          )
-        ))}
-      </InfiniteScroll>
+      <div className={styles.posts}>
+        <InfiniteScroll
+          dataLength={posts.length}
+          next={handleGetMorePosts}
+          scrollThreshold={0.8}
+          hasMore={hasMorePosts}
+          loader={<Spinner key="0" />}
+        >
+          {posts.map(post => (
+            post.id === editingPostId ? (
+              <UpdatePost
+                key={post.id}
+                post={post}
+                onPostUpdate={handlePostUpdate}
+                onClose={handleCloseEditingPost}
+                onUploadImage={handleUploadImage}
+              />
+            ) : (
+              <Post
+                post={post}
+                isOwnPost={post.userId === userId}
+                onPostLike={handlePostLike}
+                onPostDislike={handlePostDislike}
+                onExpandedPostToggle={handleExpandedPostToggle}
+                onSharePost={handleSharePost}
+                onDeletePost={handlePostDelete}
+                onEditingPost={handleEditingPost}
+                key={post.id}
+              />
+            )
+          ))}
+        </InfiniteScroll>
+      </div>
       {expandedPost && (
         <ExpandedPost
           currentUserId={userId}

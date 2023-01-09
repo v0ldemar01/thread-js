@@ -38,11 +38,22 @@ class PostReaction extends AbstractModel {
       user: {
         relation: Model.HasOneRelation,
         modelClass: UserModel,
-        filter: query => query.select('id', 'userId'),
+        filter: query => query.select('id', 'username', 'email'), // ! correct in main repo
         join: {
           from: `${DbTableName.POST_REACTIONS}.userId`,
           to: `${DbTableName.USERS}.id`
         }
+      }
+    };
+  }
+
+  static get modifiers() {
+    return {
+      withLikes(builder) {
+        return builder.select().where({ isLike: true });
+      },
+      withDislikes(builder) {
+        return builder.select().where({ isLike: false });
       }
     };
   }
