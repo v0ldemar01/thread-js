@@ -1,9 +1,8 @@
+/* eslint-disable no-underscore-dangle */
 import { Abstract } from '../abstract/abstract.repository.js';
 import {
-  Comment as CommentModel
-} from '../../models/comment/comment.model.js';
-import {
   getCommentsCountQuery,
+  getWhereUserIdByModeQuery,
   getReactionsQuery as getPostReactionsQuery
 } from './helpers.js';
 import {
@@ -26,17 +25,9 @@ class Post extends Abstract {
         getPostReactionsQuery(this.model)(true),
         getPostReactionsQuery(this.model)(false)
       )
-      .where(builder => {
-        if (userMode === 'include' && userId) {
-          builder.where({ userId });
-          return;
-        }
-        if (userMode === 'exclude' && userId) {
-          builder.whereNot({ userId });
-        }
-      })
+      .where(getWhereUserIdByModeQuery(userId, userMode))
       .whereNull('deletedAt')
-      .withGraphFetched('[image, user.image]')
+      .withGraphJoined('[image, user.image, postReactions]')
       .orderBy('createdAt', 'desc')
       .offset(offset)
       .limit(limit);
@@ -61,8 +52,8 @@ class Post extends Abstract {
       .modifyGraph('comments', builder => {
         builder.select(
           'comments.*',
-          getCommentReactionsQuery(CommentModel)(true),
-          getCommentReactionsQuery(CommentModel)(false)
+          getCommentReactionsQuery(this.model.relatedQuery('comments').modelClass())(true),
+          getCommentReactionsQuery(this.model.relatedQuery('comments').modelClass())(false)
         );
       })
       .first();

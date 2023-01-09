@@ -49,7 +49,7 @@ class Post {
       action = 'add';
     }
 
-    const updatedPost = await this._postRepository.geByIdWithUserAndReactions(postId);
+    const updatedPost = await this._postRepository.getByIdWithUserAndReactions(postId);
 
     return { ...updatedPost, action };
   }

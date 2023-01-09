@@ -5,7 +5,7 @@ class PostReaction extends Abstract {
     super(postReactionModel);
   }
 
-  getPostReaction(userId, postId) {
+  getReaction(userId, postId) {
     return this.model
       .query()
       .select()

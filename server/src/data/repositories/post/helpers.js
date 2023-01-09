@@ -9,4 +9,22 @@ const getReactionsQuery = model => isLike => {
     .as(col);
 };
 
-export { getCommentsCountQuery, getReactionsQuery };
+const getWhereUserIdByModeQuery = (userId, userMode) => builder => {
+  if (userMode === 'include' && userId) {
+    builder.where({ userId });
+    return;
+  }
+  if (userMode === 'exclude' && userId) {
+    builder.whereNot({ userId });
+  }
+  if (userMode === 'exclude' && userId) {
+    builder.whereNot({ userId });
+  }
+  if (userMode === 'likedByOwn' && userId) {
+    builder
+      .where('postReactions.isLike', true)
+      .where('postReactions.userId', userId);
+  }
+};
+
+export { getCommentsCountQuery, getReactionsQuery, getWhereUserIdByModeQuery };

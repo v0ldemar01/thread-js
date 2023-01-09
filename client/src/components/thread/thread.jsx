@@ -42,6 +42,7 @@ const Thread = () => {
 
   const showOwnPosts = watch(ThreadToolbarKey.SHOW_OWN_POSTS);
   const hideOwnPosts = watch(ThreadToolbarKey.HIDE_OWN_POSTS);
+  const showLikedByOwnPosts = watch(ThreadToolbarKey.SHOW_LIKED_BY_OWN_POSTS);
 
   const handlePostsLoad = useCallback(filtersPayload => {
     dispatch(threadActionCreator.loadPosts(filtersPayload));
@@ -69,6 +70,17 @@ const Thread = () => {
     [userId, hideOwnPosts, handlePostsLoad]
   );
 
+  const handleToggleShowLikedByOwnPosts = useCallback(
+    () => {
+      postsFilter.userId = showLikedByOwnPosts ? userId : undefined;
+      postsFilter.from = 0;
+      postsFilter.userMode = showLikedByOwnPosts ? 'likedByOwn' : 'all';
+      handlePostsLoad(postsFilter);
+      postsFilter.from = postsFilter.count; // for the next scroll
+    },
+    [userId, showLikedByOwnPosts, handlePostsLoad]
+  );
+
   useEffect(() => {
     handleToggleShowOwnPosts();
   }, [showOwnPosts, handleToggleShowOwnPosts]);
@@ -76,6 +88,10 @@ const Thread = () => {
   useEffect(() => {
     handleToggleHideOwnPosts();
   }, [hideOwnPosts, handleToggleHideOwnPosts]);
+
+  useEffect(() => {
+    handleToggleShowLikedByOwnPosts();
+  }, [showLikedByOwnPosts, handleToggleShowLikedByOwnPosts]);
 
   const handlePostLike = useCallback(
     id => dispatch(threadActionCreator.likePost(id)),
@@ -150,6 +166,11 @@ const Thread = () => {
             name={ThreadToolbarKey.HIDE_OWN_POSTS}
             control={control}
             label="Hide only my posts"
+          />
+          <Checkbox
+            name={ThreadToolbarKey.SHOW_LIKED_BY_OWN_POSTS}
+            control={control}
+            label="Show only liked by me posts"
           />
         </div>
       </form>
