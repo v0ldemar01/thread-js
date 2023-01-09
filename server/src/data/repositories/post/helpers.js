@@ -11,14 +11,11 @@ const getReactionsQuery = model => isLike => {
 
 const getWhereUserIdByModeQuery = (userId, userMode) => builder => {
   if (userMode === 'include' && userId) {
-    builder.where({ userId });
+    builder.where('posts.userId', userId);
     return;
   }
   if (userMode === 'exclude' && userId) {
-    builder.whereNot({ userId });
-  }
-  if (userMode === 'exclude' && userId) {
-    builder.whereNot({ userId });
+    builder.whereNot('posts.userId', userId);
   }
   if (userMode === 'likedByOwn' && userId) {
     builder
