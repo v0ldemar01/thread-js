@@ -28,6 +28,17 @@ class Comment {
     });
   }
 
+  updateComment(payload, id) {
+    return this._http.load(
+      `${this._apiPath}${ApiPath.COMMENTS}${CommentsApiPath.$ID.slice(0, 1)}${id}`,
+      {
+        method: HttpMethod.PUT,
+        contentType: ContentType.JSON,
+        payload: JSON.stringify(payload)
+      }
+    );
+  }
+
   deleteComment(id) {
     return this._http.load(
       `${this._apiPath}${ApiPath.COMMENTS}${CommentsApiPath.$ID.slice(0, 1)}${id}`,

@@ -5,6 +5,7 @@ const ActionType = {
   ADD_COMMENT: 'thread/add-comment',
   SET_ALL_POSTS: 'thread/set-all-posts',
   REACT_COMMENT: 'thread/react-comment',
+  UPDATE_COMMENT: 'thread/update-comment',
   DELETE_COMMENT: 'thread/delete-comment',
   LOAD_MORE_POSTS: 'thread/load-more-posts',
   SET_EXPANDED_POST: 'thread/set-expanded-post',

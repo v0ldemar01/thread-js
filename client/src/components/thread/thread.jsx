@@ -140,6 +140,7 @@ const Thread = () => {
         {posts.map(post => (
           post.id === editingPostId ? (
             <UpdatePost
+              key={post.id}
               post={post}
               onPostUpdate={handlePostUpdate}
               onClose={handleCloseEditingPost}

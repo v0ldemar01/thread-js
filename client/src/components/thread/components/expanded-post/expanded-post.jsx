@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
-import { useCallback, useDispatch, useSelector } from 'hooks/hooks.js';
-import { threadActionCreator } from 'store/actions.js';
+
 import { Spinner, Post, Modal } from 'components/common/common.js';
-import { Comment, AddComment } from 'components/thread/components/components.js';
+import { Comment, AddComment, UpdateComment } from 'components/thread/components/components.js';
+import { useState, useCallback, useDispatch, useSelector } from 'hooks/hooks.js';
+import { threadActionCreator } from 'store/actions.js';
 import { getSortedComments } from './helpers/helpers.js';
 
 const ExpandedPost = ({
@@ -11,6 +12,8 @@ const ExpandedPost = ({
   onDeletePost,
   onEditingPost
 }) => {
+  const [editingCommentId, setEditingCommentId] = useState(null);
+
   const dispatch = useDispatch();
   const { post } = useSelector(state => ({
     post: state.posts.expandedPost
@@ -44,6 +47,15 @@ const ExpandedPost = ({
     dispatch(threadActionCreator.toggleExpandedPost(id))
   ), [dispatch]);
 
+  const handleCommentUpdate = useCallback(
+    commentPayload => dispatch(threadActionCreator.updateComment(commentPayload)),
+    [dispatch]
+  );
+
+  const handleEditingComment = id => setEditingCommentId(id);
+
+  const handleCloseEditingComment = () => setEditingCommentId(null);
+
   const handleExpandedPostClose = () => handleExpandedPostToggle();
 
   const sortedComments = getSortedComments(post.comments ?? []);
@@ -68,14 +80,24 @@ const ExpandedPost = ({
           <div>
             <h3>Comments</h3>
             {sortedComments.map(comment => (
-              <Comment
-                key={comment.id}
-                comment={comment}
-                isOwnComment={comment.userId === currentUserId}
-                onCommentLike={handleCommentLike}
-                onCommentDelete={handleCommentDelete}
-                onCommentDislike={handleCommentDislike}
-              />
+              comment.id === editingCommentId ? (
+                <UpdateComment
+                  key={comment.id}
+                  comment={comment}
+                  onClose={handleCloseEditingComment}
+                  onCommentUpdate={handleCommentUpdate}
+                />
+              ) : (
+                <Comment
+                  key={comment.id}
+                  comment={comment}
+                  isOwnComment={comment.userId === currentUserId}
+                  onCommentLike={handleCommentLike}
+                  onCommentDelete={handleCommentDelete}
+                  onCommentDislike={handleCommentDislike}
+                  onEditingComment={handleEditingComment}
+                />
+              )
             ))}
             <AddComment postId={post.id} onCommentAdd={handleCommentAdd} />
           </div>

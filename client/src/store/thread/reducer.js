@@ -8,6 +8,7 @@ import {
   createPost,
   dislikePost,
   likeComment,
+  updateComment,
   deleteComment,
   loadMorePosts,
   dislikeComment,
@@ -67,6 +68,7 @@ const reducer = createReducer(initialState, builder => {
       likeComment.fulfilled,
       dislikeComment.fulfilled,
       deleteComment.fulfilled,
+      updateComment.fulfilled,
       likeCommentFromSocket.fulfilled,
       dislikeCommentFromSocket.fulfilled
     ),

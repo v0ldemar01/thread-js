@@ -188,12 +188,12 @@ const reactCommentFromSocket = async ({
     posts: { expandedPost }
   } = getState();
 
-  const updatedExpandedPost = (expandedPost?.comments ?? [])
+  const updatedExpandedPostComments = (expandedPost?.comments ?? [])
     .map(comment => (comment.id !== commentId ? comment : mapLikesOrDislikes(comment)));
   return {
     expandedPost: expandedPost ? {
       ...expandedPost,
-      comments: updatedExpandedPost
+      comments: updatedExpandedPostComments
     } : null
   };
 };
@@ -244,13 +244,36 @@ const deleteComment = createAsyncThunk(
       posts: { expandedPost }
     } = getState();
 
-    const updatedExpandedPost = (expandedPost?.comments ?? [])
+    const updatedExpandedPostComments = (expandedPost?.comments ?? [])
       .filter(comment => (comment.id !== commentId));
 
     return {
       expandedPost: expandedPost ? {
         ...expandedPost,
-        comments: updatedExpandedPost
+        comments: updatedExpandedPostComments
+      } : null
+    };
+  }
+);
+
+const updateComment = createAsyncThunk(
+  ActionType.UPDATE_COMMENT,
+  async (comment, { getState, extra: { services } }) => {
+    const newComment = await services.comment.updateComment(comment, comment.id);
+    const {
+      posts: { expandedPost }
+    } = getState();
+
+    const updatedExpandedPostComments = (expandedPost?.comments ?? [])
+      .map(statePostComment => (statePostComment.id === newComment.id ? {
+        ...statePostComment,
+        ...newComment
+      } : statePostComment));
+
+    return {
+      expandedPost: expandedPost ? {
+        ...expandedPost,
+        comments: updatedExpandedPostComments
       } : null
     };
   }
@@ -266,6 +289,7 @@ export {
   addComment,
   dislikePost,
   likeComment,
+  updateComment,
   deleteComment,
   loadMorePosts,
   dislikeComment,

@@ -16,6 +16,10 @@ class Comment {
     return this._commentRepository.getById(id);
   }
 
+  update(id, comment) {
+    return this._commentRepository.update(id, { ...comment });
+  }
+
   async delete(id) {
     const deletedCount = await this._commentRepository.softDeleteById(id);
 

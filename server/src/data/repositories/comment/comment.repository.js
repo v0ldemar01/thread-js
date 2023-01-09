@@ -32,6 +32,12 @@ class Comment extends Abstract {
       .where({ id })
       .first();
   }
+
+  update(id, { body }) {
+    return this.model
+      .query()
+      .patchAndFetchById(id, { body });
+  }
 }
 
 export { Comment };

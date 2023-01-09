@@ -22,6 +22,15 @@ const initComment = (fastify, opts, done) => {
   });
   fastify.route({
     method: HttpMethod.PUT,
+    url: CommentsApiPath.$ID,
+    [ControllerHook.HANDLER]: async req => {
+      const comment = await commentService.update(req.params.id, req.body);
+
+      return comment;
+    }
+  });
+  fastify.route({
+    method: HttpMethod.PUT,
     url: CommentsApiPath.REACT,
     [ControllerHook.HANDLER]: async req => {
       const reaction = await commentService.setReaction(req.user.id, req.body);

@@ -21,10 +21,12 @@ const Comment = ({
   isOwnComment,
   onCommentLike,
   onCommentDelete,
-  onCommentDislike
+  onCommentDislike,
+  onEditingComment
 }) => {
   const handleCommentLike = () => onCommentLike(id);
   const handleCommentDelete = () => onCommentDelete(id);
+  const handleEditingComment = () => onEditingComment(id);
   const handleCommentDislike = () => onCommentDislike(id);
 
   return (
@@ -40,6 +42,10 @@ const Comment = ({
           </div>
           {isOwnComment && (
             <div className={styles.actions}>
+              <IconButton
+                iconName={IconName.EDIT}
+                onClick={handleEditingComment}
+              />
               <IconButton
                 iconName={IconName.DELETE}
                 onClick={handleCommentDelete}
@@ -70,7 +76,8 @@ Comment.propTypes = {
   isOwnComment: PropTypes.bool.isRequired,
   onCommentLike: PropTypes.func.isRequired,
   onCommentDelete: PropTypes.func.isRequired,
-  onCommentDislike: PropTypes.func.isRequired
+  onCommentDislike: PropTypes.func.isRequired,
+  onEditingComment: PropTypes.func.isRequired
 };
 
 export { Comment };
