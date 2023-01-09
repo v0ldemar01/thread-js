@@ -27,6 +27,28 @@ class Comment {
       payload: JSON.stringify(payload)
     });
   }
+
+  reactComment(commentId, isLike = true) {
+    return this._http.load(
+      `${this._apiPath}${ApiPath.COMMENTS}${CommentsApiPath.REACT}`,
+      {
+        method: HttpMethod.PUT,
+        contentType: ContentType.JSON,
+        payload: JSON.stringify({
+          commentId,
+          isLike
+        })
+      }
+    );
+  }
+
+  likeComment(commentId) {
+    return this.reactComment(commentId, true);
+  }
+
+  dislikeComment(commentId) {
+    return this.reactComment(commentId, false);
+  }
 }
 
 export { Comment };

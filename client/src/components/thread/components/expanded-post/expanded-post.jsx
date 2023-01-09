@@ -6,7 +6,9 @@ import { Comment, AddComment } from 'components/thread/components/components.js'
 import { getSortedComments } from './helpers/helpers.js';
 
 const ExpandedPost = ({
-  onSharePost
+  isOwnPost,
+  onSharePost,
+  onEditingPost
 }) => {
   const dispatch = useDispatch();
   const { post } = useSelector(state => ({
@@ -19,6 +21,14 @@ const ExpandedPost = ({
 
   const handlePostDislike = useCallback(id => (
     dispatch(threadActionCreator.dislikePost(id))
+  ), [dispatch]);
+
+  const handleCommentLike = useCallback(id => (
+    dispatch(threadActionCreator.likeComment(id))
+  ), [dispatch]);
+
+  const handleCommentDislike = useCallback(id => (
+    dispatch(threadActionCreator.dislikeComment(id))
   ), [dispatch]);
 
   const handleCommentAdd = useCallback(commentPayload => (
@@ -42,7 +52,9 @@ const ExpandedPost = ({
         <>
           <Post
             post={post}
+            isOwnPost={isOwnPost}
             onPostLike={handlePostLike}
+            onEditingPost={onEditingPost}
             onPostDislike={handlePostDislike}
             onExpandedPostToggle={handleExpandedPostToggle}
             onSharePost={onSharePost}
@@ -50,7 +62,12 @@ const ExpandedPost = ({
           <div>
             <h3>Comments</h3>
             {sortedComments.map(comment => (
-              <Comment key={comment.id} comment={comment} />
+              <Comment
+                key={comment.id}
+                comment={comment}
+                onCommentLike={handleCommentLike}
+                onCommentDislike={handleCommentDislike}
+              />
             ))}
             <AddComment postId={post.id} onCommentAdd={handleCommentAdd} />
           </div>
@@ -63,7 +80,9 @@ const ExpandedPost = ({
 };
 
 ExpandedPost.propTypes = {
-  onSharePost: PropTypes.func.isRequired
+  isOwnPost: PropTypes.bool.isRequired,
+  onSharePost: PropTypes.func.isRequired,
+  onEditingPost: PropTypes.func.isRequired
 };
 
 export { ExpandedPost };

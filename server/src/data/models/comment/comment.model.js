@@ -4,6 +4,9 @@ import { DbTableName } from '../../../common/enums/enums.js';
 import { Abstract as AbstractModel } from '../abstract/abstract.model.js';
 import { Post as PostModel } from '../post/post.model.js';
 import { User as UserModel } from '../user/user.model.js';
+import {
+  CommentReaction as CommentReactionModel
+} from '../comment-reaction/comment-reaction.model.js';
 
 class Comment extends AbstractModel {
   static get tableName() {
@@ -42,6 +45,14 @@ class Comment extends AbstractModel {
         join: {
           from: `${DbTableName.COMMENTS}.userId`,
           to: `${DbTableName.USERS}.id`
+        }
+      },
+      commentReactions: {
+        relation: Model.HasManyRelation,
+        modelClass: CommentReactionModel,
+        join: {
+          from: `${DbTableName.COMMENTS}.id`,
+          to: `${DbTableName.COMMENT_REACTIONS}.commentId`
         }
       }
     };

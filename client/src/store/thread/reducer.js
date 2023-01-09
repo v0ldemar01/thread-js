@@ -1,16 +1,20 @@
 import { createReducer, isAnyOf } from '@reduxjs/toolkit';
 import {
-  loadPosts,
-  loadMorePosts,
-  toggleExpandedPost,
   likePost,
-  addComment,
+  loadPosts,
   applyPost,
+  addComment,
   updatePost,
   createPost,
   dislikePost,
+  likeComment,
+  loadMorePosts,
+  dislikeComment,
+  toggleExpandedPost,
   likePostFromSocket,
-  dislikePostFromSocket
+  dislikePostFromSocket,
+  likeCommentFromSocket,
+  dislikeCommentFromSocket
 } from './actions.js';
 
 const initialState = {
@@ -49,6 +53,18 @@ const reducer = createReducer(initialState, builder => {
       state.expandedPost = { ...state.expandedPost, ...newPost };
     }
   });
+  builder.addMatcher(
+    isAnyOf(
+      likeComment.fulfilled,
+      dislikeComment.fulfilled,
+      likeCommentFromSocket.fulfilled,
+      dislikeCommentFromSocket.fulfilled
+    ),
+    (state, action) => {
+      const { expandedPost } = action.payload;
+      state.expandedPost = expandedPost;
+    }
+  );
   builder.addMatcher(
     isAnyOf(
       likePost.fulfilled,

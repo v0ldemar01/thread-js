@@ -87,12 +87,12 @@ const reactPost = (isLike = true) => async (postId, { getState, extra: { service
 };
 
 const likePost = createAsyncThunk(
-  ActionType.REACT,
+  ActionType.REACT_POST,
   reactPost()
 );
 
 const dislikePost = createAsyncThunk(
-  ActionType.REACT,
+  ActionType.REACT_POST,
   reactPost(false)
 );
 
@@ -121,13 +121,82 @@ const reactPostFromSocket = async ({
 };
 
 const likePostFromSocket = createAsyncThunk(
-  ActionType.REACT_FROM_SOCKET,
+  ActionType.REACT_POST_FROM_SOCKET,
   reactPostFromSocket
 );
 
 const dislikePostFromSocket = createAsyncThunk(
-  ActionType.REACT_FROM_SOCKET,
+  ActionType.REACT_POST_FROM_SOCKET,
   reactPostFromSocket
+);
+
+const reactComment = (isLike = true) => async (commentId, { getState, extra: { services } }) => {
+  const mode = `${!isLike ? 'dis' : ''}like`;
+
+  const { likeCount, dislikeCount } = await services.comment[`${mode}Comment`](commentId);
+  const mapLikesOrDislikes = comment => ({
+    ...comment,
+    likeCount,
+    dislikeCount
+  });
+
+  const {
+    posts: { expandedPost }
+  } = getState();
+
+  const updatedExpandedPostComments = expandedPost.comments
+    .map(comment => (comment.id !== commentId ? comment : mapLikesOrDislikes(comment)));
+  return {
+    expandedPost: {
+      ...expandedPost,
+      comments: updatedExpandedPostComments
+    }
+  };
+};
+
+const likeComment = createAsyncThunk(
+  ActionType.REACT_COMMENT,
+  reactComment()
+);
+
+const dislikeComment = createAsyncThunk(
+  ActionType.REACT_COMMENT,
+  reactComment(false)
+);
+
+const reactCommentFromSocket = async ({
+  id: commentId,
+  likeCount,
+  dislikeCount
+}, { getState }) => {
+  const mapLikesOrDislikes = comment => ({
+    ...comment,
+    likeCount,
+    dislikeCount
+  });
+
+  const {
+    posts: { expandedPost }
+  } = getState();
+
+  const updatedExpandedPost = (expandedPost?.comments ?? [])
+    .map(comment => (comment.id !== commentId ? comment : mapLikesOrDislikes(comment)));
+  return {
+    expandedPost: expandedPost ? {
+      ...expandedPost,
+      comments: updatedExpandedPost
+    } : null
+  };
+};
+
+const likeCommentFromSocket = createAsyncThunk(
+  ActionType.REACT_COMMENT_FROM_SOCKET,
+  reactCommentFromSocket
+);
+
+const dislikeCommentFromSocket = createAsyncThunk(
+  ActionType.REACT_COMMENT_FROM_SOCKET,
+  reactCommentFromSocket
 );
 
 const addComment = createAsyncThunk(
@@ -158,15 +227,19 @@ const addComment = createAsyncThunk(
 );
 
 export {
-  loadPosts,
-  loadMorePosts,
-  applyPost,
-  createPost,
-  toggleExpandedPost,
   likePost,
-  dislikePost,
-  addComment,
-  likePostFromSocket,
+  applyPost,
+  loadPosts,
+  createPost,
   updatePost,
-  dislikePostFromSocket
+  addComment,
+  dislikePost,
+  likeComment,
+  loadMorePosts,
+  dislikeComment,
+  likePostFromSocket,
+  toggleExpandedPost,
+  dislikePostFromSocket,
+  likeCommentFromSocket,
+  dislikeCommentFromSocket
 };

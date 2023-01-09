@@ -1,9 +1,15 @@
 import { Abstract } from '../abstract/abstract.repository.js';
 import {
+  Comment as CommentModel
+} from '../../models/comment/comment.model.js';
+import {
+  getWhereUserIdQuery,
   getCommentsCountQuery,
-  getReactionsQuery,
-  getWhereUserIdQuery
+  getReactionsQuery as getPostReactionsQuery
 } from './helpers.js';
+import {
+  getReactionsQuery as getCommentReactionsQuery
+} from '../comment/helpers.js';
 
 class Post extends Abstract {
   constructor({ postModel }) {
@@ -18,8 +24,8 @@ class Post extends Abstract {
       .select(
         'posts.*',
         getCommentsCountQuery(this.model),
-        getReactionsQuery(this.model)(true),
-        getReactionsQuery(this.model)(false)
+        getPostReactionsQuery(this.model)(true),
+        getPostReactionsQuery(this.model)(false)
       )
       .where(getWhereUserIdQuery(userId))
       .withGraphFetched('[image, user.image]')
@@ -34,11 +40,18 @@ class Post extends Abstract {
       .select(
         'posts.*',
         getCommentsCountQuery(this.model),
-        getReactionsQuery(this.model)(true),
-        getReactionsQuery(this.model)(false)
+        getPostReactionsQuery(this.model)(true),
+        getPostReactionsQuery(this.model)(false)
       )
       .where({ id })
       .withGraphFetched('[comments.user.image, user.image, image]')
+      .modifyGraph('comments', builder => {
+        builder.select(
+          'comments.*',
+          getCommentReactionsQuery(CommentModel)(true),
+          getCommentReactionsQuery(CommentModel)(false)
+        );
+      })
       .first();
   }
 
@@ -48,8 +61,8 @@ class Post extends Abstract {
       .select(
         'id',
         'userId',
-        getReactionsQuery(this.model)(true),
-        getReactionsQuery(this.model)(false)
+        getPostReactionsQuery(this.model)(true),
+        getPostReactionsQuery(this.model)(false)
       )
       .where({ id })
       .first();

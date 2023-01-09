@@ -154,7 +154,13 @@ const Thread = () => {
           )
         ))}
       </InfiniteScroll>
-      {expandedPost && <ExpandedPost onSharePost={handleSharePost} />}
+      {expandedPost && (
+        <ExpandedPost
+          isOwnPost={expandedPost.userId === userId}
+          onSharePost={handleSharePost}
+          onEditingPost={handleEditingPost}
+        />
+      )}
       {sharedPostId && (
         <SharedPostLink
           postId={sharedPostId}

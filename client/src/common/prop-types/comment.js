@@ -8,6 +8,8 @@ const commentType = PropTypes.exact({
   updatedAt: PropTypes.string.isRequired,
   postId: PropTypes.number.isRequired,
   userId: PropTypes.number.isRequired,
+  likeCount: PropTypes.string.isRequired,
+  dislikeCount: PropTypes.string.isRequired,
   user: PropTypes.exact({
     id: PropTypes.number.isRequired,
     username: PropTypes.string.isRequired,

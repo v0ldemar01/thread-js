@@ -32,6 +32,26 @@ const notificationSocket = ({ dispatch }) => {
     }
   );
   notificationSocketInstance.on(
+    NotificationSocketEvent.LIKE_COMMENT,
+    comment => {
+      dispatch(threadActionCreator.likeCommentFromSocket(comment));
+      dispatch(appActionCreator.notify({
+        type: NotificationType.INFO,
+        message: NotificationMessage.LIKED_COMMENT
+      }));
+    }
+  );
+  notificationSocketInstance.on(
+    NotificationSocketEvent.DISLIKE_COMMENT,
+    comment => {
+      dispatch(threadActionCreator.dislikeCommentFromSocket(comment));
+      dispatch(appActionCreator.notify({
+        type: NotificationType.INFO,
+        message: NotificationMessage.DISLIKED_COMMENT
+      }));
+    }
+  );
+  notificationSocketInstance.on(
     NotificationSocketEvent.NEW_POST,
     post => {
       dispatch(threadActionCreator.applyPost(post));

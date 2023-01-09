@@ -1,6 +1,8 @@
+/* eslint-disable no-return-assign */
 class Comment {
-  constructor({ commentRepository }) {
+  constructor({ commentRepository, commentReactionRepository }) {
     this._commentRepository = commentRepository;
+    this._commentReactionRepository = commentReactionRepository;
   }
 
   create(userId, comment) {
@@ -12,6 +14,30 @@ class Comment {
 
   getCommentById(id) {
     return this._commentRepository.getCommentById(id);
+  }
+
+  async setCommentReaction(userId, { commentId, isLike = true }) {
+    let action;
+    const updateOrDelete = react => (react.isLike === isLike
+      ? (action = 'remove', this._commentReactionRepository.deleteById(react.id))
+      : (action = 'add', this._commentReactionRepository.updateById(react.id, { isLike })));
+
+    const reaction = await this._commentReactionRepository.getCommentReaction(
+      userId,
+      commentId,
+      isLike
+    );
+
+    if (reaction) {
+      await updateOrDelete(reaction);
+    } else {
+      await this._commentReactionRepository.create({ userId, commentId, isLike });
+      action = 'add';
+    }
+
+    const updatedComment = await this._commentRepository.getCommentByIdWithUserAndReactions(commentId);
+
+    return { ...updatedComment, action };
   }
 }
 

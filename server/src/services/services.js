@@ -3,7 +3,8 @@ import {
   comment as commentRepository,
   image as imageRepository,
   post as postRepository,
-  postReaction as postReactionRepository
+  postReaction as postReactionRepository,
+  commentReaction as commentReactionRepository
 } from '../data/repositories/repositories.js';
 import { Auth } from './auth/auth.service.js';
 import { Comment } from './comment/comment.service.js';
@@ -20,7 +21,8 @@ const auth = new Auth({
 });
 
 const comment = new Comment({
-  commentRepository
+  commentRepository,
+  commentReactionRepository
 });
 
 const image = new Image({
