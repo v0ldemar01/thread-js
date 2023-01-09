@@ -38,11 +38,22 @@ class CommentReaction extends AbstractModel {
       user: {
         relation: Model.HasOneRelation,
         modelClass: UserModel,
-        filter: query => query.select('id', 'userId'),
+        filter: query => query.select('id', 'email', 'username'),
         join: {
-          from: `${DbTableName.POST_REACTIONS}.userId`,
+          from: `${DbTableName.COMMENT_REACTIONS}.userId`,
           to: `${DbTableName.USERS}.id`
         }
+      }
+    };
+  }
+
+  static get modifiers() {
+    return {
+      withLikes(builder) {
+        return builder.select().where({ isLike: true });
+      },
+      withDislikes(builder) {
+        return builder.select().where({ isLike: false });
       }
     };
   }

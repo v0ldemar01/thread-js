@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
 import PropTypes from 'prop-types';
 
 import { IconName } from 'common/enums/enums.js';
-import { IconButton } from 'components/common/common.js';
+import { IconButton, Tooltip, UserReaction } from 'components/common/common.js';
 import { commentType } from 'common/prop-types/prop-types.js';
 import { DEFAULT_USER_AVATAR } from 'common/constants/constants.js';
 import { getFromNowTime } from 'helpers/helpers';
@@ -15,8 +14,8 @@ const Comment = ({
     body,
     createdAt,
     user,
-    likeCount,
-    dislikeCount
+    likes,
+    dislikes
   },
   isOwnComment,
   onCommentLike,
@@ -56,16 +55,30 @@ const Comment = ({
         </div>
       </div>
       <div className={styles.extra}>
-        <IconButton
-          iconName={IconName.THUMBS_UP}
-          label={likeCount}
-          onClick={handleCommentLike}
-        />
-        <IconButton
-          iconName={IconName.THUMBS_DOWN}
-          label={dislikeCount}
-          onClick={handleCommentDislike}
-        />
+        <Tooltip
+          content={likes.length ? likes.map(({ user: userReaction }) => (
+            <UserReaction user={userReaction} />
+          )) : 'No likes yet'}
+          direction="top"
+        >
+          <IconButton
+            iconName={IconName.THUMBS_UP}
+            label={likes?.length}
+            onClick={handleCommentLike}
+          />
+        </Tooltip>
+        <Tooltip
+          content={dislikes.length ? dislikes.map(({ user: userReaction }) => (
+            <UserReaction user={userReaction} />
+          )) : 'No dislikes'}
+          direction="top"
+        >
+          <IconButton
+            iconName={IconName.THUMBS_DOWN}
+            label={dislikes?.length}
+            onClick={handleCommentDislike}
+          />
+        </Tooltip>
       </div>
     </div>
   );

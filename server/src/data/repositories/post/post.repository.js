@@ -3,9 +3,6 @@ import {
   getCommentsCountQuery,
   getWhereUserIdByModeQuery
 } from './helpers.js';
-import {
-  getReactionsQuery as getCommentReactionsQuery
-} from '../comment/helpers.js';
 
 class Post extends Abstract {
   constructor({ postModel }) {
@@ -45,7 +42,11 @@ class Post extends Abstract {
       .withGraphFetched(`[
         image,
         user.image,
-        comments(onlyNotDeleted).user.image,
+        comments(onlyNotDeleted).[
+          user.image,
+          commentReactions(withLikes) as likes .[user],
+          commentReactions(withDislikes) as dislikes .[user]
+        ],
         postReactions(withLikes) as likes .[user],
         postReactions(withDislikes) as dislikes .[user]
       ]`)
@@ -54,13 +55,13 @@ class Post extends Abstract {
           builder.whereNull('deletedAt');
         }
       })
-      .modifyGraph('comments', builder => {
-        builder.select(
-          'comments.*',
-          getCommentReactionsQuery(this.model.relatedQuery('comments').modelClass())(true),
-          getCommentReactionsQuery(this.model.relatedQuery('comments').modelClass())(false)
-        );
-      })
+      // .modifyGraph('comments', builder => {
+      //   builder.select(
+      //     'comments.*',
+      //     getCommentReactionsQuery(this.model.relatedQuery('comments').modelClass())(true),
+      //     getCommentReactionsQuery(this.model.relatedQuery('comments').modelClass())(false)
+      //   );
+      // })
       .first();
   }
 

@@ -142,11 +142,11 @@ const dislikePostFromSocket = createAsyncThunk(
 const reactComment = (isLike = true) => async (commentId, { getState, extra: { services } }) => {
   const mode = `${!isLike ? 'dis' : ''}like`;
 
-  const { likeCount, dislikeCount } = await services.comment[`${mode}Comment`](commentId);
+  const { likes, dislikes } = await services.comment[`${mode}Comment`](commentId);
   const mapLikesOrDislikes = comment => ({
     ...comment,
-    likeCount,
-    dislikeCount
+    likes,
+    dislikes
   });
 
   const {
@@ -175,13 +175,13 @@ const dislikeComment = createAsyncThunk(
 
 const reactCommentFromSocket = async ({
   id: commentId,
-  likeCount,
-  dislikeCount
+  likes,
+  dislikes
 }, { getState }) => {
   const mapLikesOrDislikes = comment => ({
     ...comment,
-    likeCount,
-    dislikeCount
+    likes,
+    dislikes
   });
 
   const {

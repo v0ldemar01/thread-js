@@ -1,7 +1,4 @@
 import { Abstract } from '../abstract/abstract.repository.js';
-import {
-  getReactionsQuery
-} from './helpers.js';
 
 class Comment extends Abstract {
   constructor({ commentModel }) {
@@ -12,24 +9,27 @@ class Comment extends Abstract {
     return this.model
       .query()
       .select(
-        'comments.*',
-        getReactionsQuery(this.model)(true),
-        getReactionsQuery(this.model)(false)
+        'comments.*'
       )
       .findById(id)
-      .withGraphFetched('[user.image]');
+      .withGraphFetched(`[
+        user.image,
+        commentReactions(withLikes) as likes .[user],
+        commentReactions(withDislikes) as dislikes .[user]
+      ]`);
   }
 
   getByIdWithUserAndReactions(id) {
     return this.model
       .query()
       .select(
-        'id',
-        'userId',
-        getReactionsQuery(this.model)(true),
-        getReactionsQuery(this.model)(false)
+        'comments.*'
       )
       .where({ id })
+      .withGraphFetched(`[
+        commentReactions(withLikes) as likes .[user],
+        commentReactions(withDislikes) as dislikes .[user]
+      ]`)
       .first();
   }
 
