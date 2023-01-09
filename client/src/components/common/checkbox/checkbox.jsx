@@ -3,7 +3,7 @@ import { useController } from 'react-hook-form';
 
 import styles from './styles.module.scss';
 
-const Checkbox = ({ name, label, control }) => {
+const Checkbox = ({ name, label, control, disabled }) => {
   const { field } = useController({ name, control });
 
   return (
@@ -12,6 +12,7 @@ const Checkbox = ({ name, label, control }) => {
         {...field}
         name={name}
         type="checkbox"
+        disabled={disabled}
         id="toggle-checkbox"
         className={`${styles.switch} ${styles.pointer}`}
       />
@@ -23,7 +24,12 @@ const Checkbox = ({ name, label, control }) => {
 Checkbox.propTypes = {
   name: PropTypes.string.isRequired,
   control: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  label: PropTypes.string.isRequired
+  label: PropTypes.string.isRequired,
+  disabled: PropTypes.bool
+};
+
+Checkbox.defaultProps = {
+  disabled: false
 };
 
 export { Checkbox };

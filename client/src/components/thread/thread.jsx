@@ -161,16 +161,19 @@ const Thread = () => {
             name={ThreadToolbarKey.SHOW_OWN_POSTS}
             control={control}
             label="Show only my posts"
+            disabled={hideOwnPosts || showLikedByOwnPosts}
           />
           <Checkbox
             name={ThreadToolbarKey.HIDE_OWN_POSTS}
             control={control}
             label="Hide only my posts"
+            disabled={showOwnPosts || showLikedByOwnPosts}
           />
           <Checkbox
             name={ThreadToolbarKey.SHOW_LIKED_BY_OWN_POSTS}
             control={control}
             label="Show only liked by me posts"
+            disabled={showOwnPosts || hideOwnPosts}
           />
         </div>
       </form>
