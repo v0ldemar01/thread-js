@@ -13,7 +13,7 @@ const initPost = (fastify, opts, done) => {
   fastify.route({
     method: HttpMethod.GET,
     url: PostsApiPath.ROOT,
-    [ControllerHook.HANDLER]: req => postService.getOnes(req.query)
+    [ControllerHook.HANDLER]: req => postService.getPosts(req.query)
   });
   fastify.route({
     method: HttpMethod.GET,

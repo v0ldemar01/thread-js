@@ -3,7 +3,6 @@ import {
   Comment as CommentModel
 } from '../../models/comment/comment.model.js';
 import {
-  getWhereUserIdQuery,
   getCommentsCountQuery,
   getReactionsQuery as getPostReactionsQuery
 } from './helpers.js';
@@ -16,8 +15,8 @@ class Post extends Abstract {
     super(postModel);
   }
 
-  getOnes(filter) {
-    const { from: offset, count: limit, userId } = filter;
+  getPosts(filter) {
+    const { from: offset, count: limit, userId, userMode } = filter;
 
     return this.model
       .query()
@@ -27,7 +26,15 @@ class Post extends Abstract {
         getPostReactionsQuery(this.model)(true),
         getPostReactionsQuery(this.model)(false)
       )
-      .where(getWhereUserIdQuery(userId))
+      .where(builder => {
+        if (userMode === 'include' && userId) {
+          builder.where({ userId });
+          return;
+        }
+        if (userMode === 'exclude' && userId) {
+          builder.whereNot({ userId });
+        }
+      })
       .whereNull('deletedAt')
       .withGraphFetched('[image, user.image]')
       .orderBy('createdAt', 'desc')

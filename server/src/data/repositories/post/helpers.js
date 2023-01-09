@@ -9,10 +9,4 @@ const getReactionsQuery = model => isLike => {
     .as(col);
 };
 
-const getWhereUserIdQuery = userId => builder => {
-  if (userId) {
-    builder.where({ userId });
-  }
-};
-
-export { getCommentsCountQuery, getReactionsQuery, getWhereUserIdQuery };
+export { getCommentsCountQuery, getReactionsQuery };

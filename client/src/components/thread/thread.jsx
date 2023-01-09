@@ -20,7 +20,8 @@ import { UpdatePost } from './components/update-post/update-post.jsx';
 const postsFilter = {
   userId: undefined,
   from: 0,
-  count: 10
+  count: 10,
+  userMode: 'all'
 };
 
 const Thread = () => {
@@ -40,6 +41,7 @@ const Thread = () => {
   });
 
   const showOwnPosts = watch(ThreadToolbarKey.SHOW_OWN_POSTS);
+  const hideOwnPosts = watch(ThreadToolbarKey.HIDE_OWN_POSTS);
 
   const handlePostsLoad = useCallback(filtersPayload => {
     dispatch(threadActionCreator.loadPosts(filtersPayload));
@@ -49,15 +51,31 @@ const Thread = () => {
     () => {
       postsFilter.userId = showOwnPosts ? userId : undefined;
       postsFilter.from = 0;
+      postsFilter.userMode = showOwnPosts ? 'include' : 'all';
       handlePostsLoad(postsFilter);
       postsFilter.from = postsFilter.count; // for the next scroll
     },
     [userId, showOwnPosts, handlePostsLoad]
   );
 
+  const handleToggleHideOwnPosts = useCallback(
+    () => {
+      postsFilter.userId = hideOwnPosts ? userId : undefined;
+      postsFilter.from = 0;
+      postsFilter.userMode = hideOwnPosts ? 'exclude' : 'all';
+      handlePostsLoad(postsFilter);
+      postsFilter.from = postsFilter.count; // for the next scroll
+    },
+    [userId, hideOwnPosts, handlePostsLoad]
+  );
+
   useEffect(() => {
     handleToggleShowOwnPosts();
   }, [showOwnPosts, handleToggleShowOwnPosts]);
+
+  useEffect(() => {
+    handleToggleHideOwnPosts();
+  }, [hideOwnPosts, handleToggleHideOwnPosts]);
 
   const handlePostLike = useCallback(
     id => dispatch(threadActionCreator.likePost(id)),
@@ -127,6 +145,11 @@ const Thread = () => {
             name={ThreadToolbarKey.SHOW_OWN_POSTS}
             control={control}
             label="Show only my posts"
+          />
+          <Checkbox
+            name={ThreadToolbarKey.HIDE_OWN_POSTS}
+            control={control}
+            label="Hide only my posts"
           />
         </div>
       </form>

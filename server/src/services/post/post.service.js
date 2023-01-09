@@ -5,8 +5,8 @@ class Post {
     this._postReactionRepository = postReactionRepository;
   }
 
-  getOnes(filter) {
-    return this._postRepository.getOnes(filter);
+  getPosts(filter) {
+    return this._postRepository.getPosts(filter);
   }
 
   getById(id) {
