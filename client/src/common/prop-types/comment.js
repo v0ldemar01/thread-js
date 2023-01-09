@@ -6,6 +6,7 @@ const commentType = PropTypes.exact({
   body: PropTypes.string.isRequired,
   createdAt: PropTypes.string.isRequired,
   updatedAt: PropTypes.string.isRequired,
+  deletedAt: PropTypes.string,
   postId: PropTypes.number.isRequired,
   userId: PropTypes.number.isRequired,
   likeCount: PropTypes.string.isRequired,

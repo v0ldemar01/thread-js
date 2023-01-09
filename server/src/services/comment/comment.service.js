@@ -12,11 +12,17 @@ class Comment {
     });
   }
 
-  getCommentById(id) {
-    return this._commentRepository.getCommentById(id);
+  getById(id) {
+    return this._commentRepository.getById(id);
   }
 
-  async setCommentReaction(userId, { commentId, isLike = true }) {
+  async delete(id) {
+    const deletedCount = await this._commentRepository.softDeleteById(id);
+
+    return Boolean(deletedCount);
+  }
+
+  async setReaction(userId, { commentId, isLike = true }) {
     let action;
     const updateOrDelete = react => (react.isLike === isLike
       ? (action = 'remove', this._commentReactionRepository.deleteById(react.id))
@@ -35,7 +41,7 @@ class Comment {
       action = 'add';
     }
 
-    const updatedComment = await this._commentRepository.getCommentByIdWithUserAndReactions(commentId);
+    const updatedComment = await this._commentRepository.getByIdWithUserAndReactions(commentId);
 
     return { ...updatedComment, action };
   }

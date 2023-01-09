@@ -14,6 +14,7 @@ const Post = ({
   onExpandedPostToggle,
   onEditingPost,
   onPostDislike,
+  onDeletePost,
   onSharePost
 }) => {
   const {
@@ -32,6 +33,7 @@ const Post = ({
   const handlePostDislike = () => onPostDislike(id);
   const handleExpandedPostToggle = () => onExpandedPostToggle(id);
   const handleEditingPost = () => onEditingPost(id);
+  const handleDeletePost = () => onDeletePost(id);
   const handleSharePost = () => onSharePost(id);
 
   return (
@@ -46,6 +48,10 @@ const Post = ({
             <IconButton
               iconName={IconName.EDIT}
               onClick={handleEditingPost}
+            />
+            <IconButton
+              iconName={IconName.DELETE}
+              onClick={handleDeletePost}
             />
           </div>
         )}
@@ -83,6 +89,7 @@ Post.propTypes = {
   onPostDislike: PropTypes.func.isRequired,
   onExpandedPostToggle: PropTypes.func.isRequired,
   onEditingPost: PropTypes.func.isRequired,
+  onDeletePost: PropTypes.func.isRequired,
   onSharePost: PropTypes.func.isRequired
 };
 

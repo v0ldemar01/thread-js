@@ -28,6 +28,15 @@ class Comment {
     });
   }
 
+  deleteComment(id) {
+    return this._http.load(
+      `${this._apiPath}${ApiPath.COMMENTS}${CommentsApiPath.$ID.slice(0, 1)}${id}`,
+      {
+        method: HttpMethod.DELETE
+      }
+    );
+  }
+
   reactComment(commentId, isLike = true) {
     return this._http.load(
       `${this._apiPath}${ApiPath.COMMENTS}${CommentsApiPath.REACT}`,

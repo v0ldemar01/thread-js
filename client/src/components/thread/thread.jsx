@@ -84,6 +84,11 @@ const Thread = () => {
     [dispatch]
   );
 
+  const handlePostDelete = useCallback(
+    id => dispatch(threadActionCreator.deletePost(id)),
+    [dispatch]
+  );
+
   const handleMorePostsLoad = useCallback(
     filtersPayload => {
       dispatch(threadActionCreator.loadMorePosts(filtersPayload));
@@ -148,6 +153,7 @@ const Thread = () => {
               onPostDislike={handlePostDislike}
               onExpandedPostToggle={handleExpandedPostToggle}
               onSharePost={handleSharePost}
+              onDeletePost={handlePostDelete}
               onEditingPost={handleEditingPost}
               key={post.id}
             />
@@ -156,8 +162,9 @@ const Thread = () => {
       </InfiniteScroll>
       {expandedPost && (
         <ExpandedPost
-          isOwnPost={expandedPost.userId === userId}
+          currentUserId={userId}
           onSharePost={handleSharePost}
+          onDeletePost={handlePostDelete}
           onEditingPost={handleEditingPost}
         />
       )}

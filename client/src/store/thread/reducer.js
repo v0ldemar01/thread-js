@@ -8,13 +8,15 @@ import {
   createPost,
   dislikePost,
   likeComment,
+  deleteComment,
   loadMorePosts,
   dislikeComment,
   toggleExpandedPost,
   likePostFromSocket,
   dislikePostFromSocket,
   likeCommentFromSocket,
-  dislikeCommentFromSocket
+  dislikeCommentFromSocket,
+  deletePost
 } from './actions.js';
 
 const initialState = {
@@ -53,10 +55,18 @@ const reducer = createReducer(initialState, builder => {
       state.expandedPost = { ...state.expandedPost, ...newPost };
     }
   });
+  builder.addCase(deletePost.fulfilled, (state, action) => {
+    const { postId } = action.payload;
+    state.posts = state.posts.filter(statePost => (statePost.id !== postId));
+    if (state.expandedPost?.id === postId) {
+      state.expandedPost = null;
+    }
+  });
   builder.addMatcher(
     isAnyOf(
       likeComment.fulfilled,
       dislikeComment.fulfilled,
+      deleteComment.fulfilled,
       likeCommentFromSocket.fulfilled,
       dislikeCommentFromSocket.fulfilled
     ),

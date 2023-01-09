@@ -16,7 +16,7 @@ class Post extends Abstract {
     super(postModel);
   }
 
-  getPosts(filter) {
+  getOnes(filter) {
     const { from: offset, count: limit, userId } = filter;
 
     return this.model
@@ -28,13 +28,14 @@ class Post extends Abstract {
         getPostReactionsQuery(this.model)(false)
       )
       .where(getWhereUserIdQuery(userId))
+      .whereNull('deletedAt')
       .withGraphFetched('[image, user.image]')
       .orderBy('createdAt', 'desc')
       .offset(offset)
       .limit(limit);
   }
 
-  getPostById(id) {
+  getById(id) {
     return this.model
       .query()
       .select(
@@ -44,7 +45,12 @@ class Post extends Abstract {
         getPostReactionsQuery(this.model)(false)
       )
       .where({ id })
-      .withGraphFetched('[comments.user.image, user.image, image]')
+      .withGraphFetched('[comments(onlyNotDeleted).user.image, user.image, image]')
+      .modifiers({
+        onlyNotDeleted(builder) {
+          builder.whereNull('deletedAt');
+        }
+      })
       .modifyGraph('comments', builder => {
         builder.select(
           'comments.*',
@@ -55,7 +61,7 @@ class Post extends Abstract {
       .first();
   }
 
-  getPostByIdWithUserAndReactions(id) {
+  getByIdWithUserAndReactions(id) {
     return this.model
       .query()
       .select(
@@ -68,7 +74,7 @@ class Post extends Abstract {
       .first();
   }
 
-  updateById(id, { imageId, body }) {
+  update(id, { imageId, body }) {
     return this.model
       .query()
       .patchAndFetchById(id, { imageId, body });

@@ -23,7 +23,8 @@ class Comment extends AbstractModel {
         ...baseSchema.properties,
         body: { type: 'string' },
         postId: { type: ['integer', 'null'] },
-        userId: { type: ['integer', 'null'] }
+        userId: { type: ['integer', 'null'] },
+        deletedAt: { type: ['string', 'null'] }
       }
     };
   }

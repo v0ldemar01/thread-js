@@ -6,8 +6,9 @@ import { Comment, AddComment } from 'components/thread/components/components.js'
 import { getSortedComments } from './helpers/helpers.js';
 
 const ExpandedPost = ({
-  isOwnPost,
+  currentUserId,
   onSharePost,
+  onDeletePost,
   onEditingPost
 }) => {
   const dispatch = useDispatch();
@@ -35,6 +36,10 @@ const ExpandedPost = ({
     dispatch(threadActionCreator.addComment(commentPayload))
   ), [dispatch]);
 
+  const handleCommentDelete = useCallback(id => (
+    dispatch(threadActionCreator.deleteComment(id))
+  ), [dispatch]);
+
   const handleExpandedPostToggle = useCallback(id => (
     dispatch(threadActionCreator.toggleExpandedPost(id))
   ), [dispatch]);
@@ -52,8 +57,9 @@ const ExpandedPost = ({
         <>
           <Post
             post={post}
-            isOwnPost={isOwnPost}
+            isOwnPost={post.userId === currentUserId}
             onPostLike={handlePostLike}
+            onDeletePost={onDeletePost}
             onEditingPost={onEditingPost}
             onPostDislike={handlePostDislike}
             onExpandedPostToggle={handleExpandedPostToggle}
@@ -65,7 +71,9 @@ const ExpandedPost = ({
               <Comment
                 key={comment.id}
                 comment={comment}
+                isOwnComment={comment.userId === currentUserId}
                 onCommentLike={handleCommentLike}
+                onCommentDelete={handleCommentDelete}
                 onCommentDislike={handleCommentDislike}
               />
             ))}
@@ -80,8 +88,9 @@ const ExpandedPost = ({
 };
 
 ExpandedPost.propTypes = {
-  isOwnPost: PropTypes.bool.isRequired,
+  currentUserId: PropTypes.number.isRequired,
   onSharePost: PropTypes.func.isRequired,
+  onDeletePost: PropTypes.func.isRequired,
   onEditingPost: PropTypes.func.isRequired
 };
 

@@ -1,9 +1,11 @@
 const ActionType = {
   ADD_POST: 'thread/add-post',
   UPDATE_POST: 'thread/update-post',
+  DELETE_POST: 'thread/delete-post',
   ADD_COMMENT: 'thread/add-comment',
   SET_ALL_POSTS: 'thread/set-all-posts',
   REACT_COMMENT: 'thread/react-comment',
+  DELETE_COMMENT: 'thread/delete-comment',
   LOAD_MORE_POSTS: 'thread/load-more-posts',
   SET_EXPANDED_POST: 'thread/set-expanded-post',
   REACT_POST_FROM_SOCKET: 'thread/react-post-from-socket',

@@ -5,12 +5,12 @@ class Post {
     this._postReactionRepository = postReactionRepository;
   }
 
-  getPosts(filter) {
-    return this._postRepository.getPosts(filter);
+  getOnes(filter) {
+    return this._postRepository.getOnes(filter);
   }
 
-  getPostById(id) {
-    return this._postRepository.getPostById(id);
+  getById(id) {
+    return this._postRepository.getById(id);
   }
 
   create(userId, post) {
@@ -20,8 +20,14 @@ class Post {
     });
   }
 
-  updatePost(postId, post) {
-    return this._postRepository.updateById(postId, { ...post });
+  update(postId, post) {
+    return this._postRepository.update(postId, { ...post });
+  }
+
+  async delete(id) {
+    const deletedCount = await this._postRepository.softDeleteById(id);
+
+    return Boolean(deletedCount);
   }
 
   async setReaction(userId, { postId, isLike = true }) {
@@ -30,7 +36,7 @@ class Post {
       ? (action = 'remove', this._postReactionRepository.deleteById(react.id))
       : (action = 'add', this._postReactionRepository.updateById(react.id, { isLike })));
 
-    const reaction = await this._postReactionRepository.getPostReaction(
+    const reaction = await this._postReactionRepository.getReaction(
       userId,
       postId,
       isLike
@@ -43,7 +49,7 @@ class Post {
       action = 'add';
     }
 
-    const updatedPost = await this._postRepository.getPostByIdWithUserAndReactions(postId);
+    const updatedPost = await this._postRepository.geByIdWithUserAndReactions(postId);
 
     return { ...updatedPost, action };
   }

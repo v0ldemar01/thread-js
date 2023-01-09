@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import PropTypes from 'prop-types';
 
 import { IconName } from 'common/enums/enums.js';
@@ -17,10 +18,13 @@ const Comment = ({
     likeCount,
     dislikeCount
   },
+  isOwnComment,
   onCommentLike,
+  onCommentDelete,
   onCommentDislike
 }) => {
   const handleCommentLike = () => onCommentLike(id);
+  const handleCommentDelete = () => onCommentDelete(id);
   const handleCommentDislike = () => onCommentDislike(id);
 
   return (
@@ -34,6 +38,14 @@ const Comment = ({
             <span className={styles.author}>{user.username}</span>
             <span className={styles.date}>{getFromNowTime(createdAt)}</span>
           </div>
+          {isOwnComment && (
+            <div className={styles.actions}>
+              <IconButton
+                iconName={IconName.DELETE}
+                onClick={handleCommentDelete}
+              />
+            </div>
+          )}
           <p>{body}</p>
         </div>
       </div>
@@ -50,13 +62,14 @@ const Comment = ({
         />
       </div>
     </div>
-
   );
 };
 
 Comment.propTypes = {
   comment: commentType.isRequired,
+  isOwnComment: PropTypes.bool.isRequired,
   onCommentLike: PropTypes.func.isRequired,
+  onCommentDelete: PropTypes.func.isRequired,
   onCommentDislike: PropTypes.func.isRequired
 };
 

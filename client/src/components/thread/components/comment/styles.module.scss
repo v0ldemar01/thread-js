@@ -1,6 +1,7 @@
 .comment {
   display: flex;
   flex-direction: row;
+  position: relative;
   gap: 10px;
 
   &:not(:last-child) {
@@ -20,6 +21,16 @@
   .date {
     color: rgba(0 0 0 / 40%);
     font-size: 0.85rem;
+  }
+
+  .actions {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    & > button {
+      padding: 0;
+    }
   }
 }
 

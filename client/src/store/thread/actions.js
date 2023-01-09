@@ -55,6 +55,15 @@ const updatePost = createAsyncThunk(
   }
 );
 
+const deletePost = createAsyncThunk(
+  ActionType.DELETE_POST,
+  async (postId, { extra: { services } }) => {
+    await services.post.deletePost(postId);
+
+    return { postId };
+  }
+);
+
 const toggleExpandedPost = createAsyncThunk(
   ActionType.SET_EXPANDED_POST,
   async (postId, { extra: { services } }) => {
@@ -226,15 +235,38 @@ const addComment = createAsyncThunk(
   }
 );
 
+const deleteComment = createAsyncThunk(
+  ActionType.DELETE_COMMENT,
+  async (commentId, { getState, extra: { services } }) => {
+    await services.comment.deleteComment(commentId);
+
+    const {
+      posts: { expandedPost }
+    } = getState();
+
+    const updatedExpandedPost = (expandedPost?.comments ?? [])
+      .filter(comment => (comment.id !== commentId));
+
+    return {
+      expandedPost: expandedPost ? {
+        ...expandedPost,
+        comments: updatedExpandedPost
+      } : null
+    };
+  }
+);
+
 export {
   likePost,
   applyPost,
   loadPosts,
+  deletePost,
   createPost,
   updatePost,
   addComment,
   dislikePost,
   likeComment,
+  deleteComment,
   loadMorePosts,
   dislikeComment,
   likePostFromSocket,

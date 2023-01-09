@@ -3,7 +3,8 @@ import {
   SocketNamespace,
   CommentsApiPath,
   ControllerHook,
-  HttpMethod
+  HttpMethod,
+  HttpCode
 } from '../../common/enums/enums.js';
 
 const initComment = (fastify, opts, done) => {
@@ -12,7 +13,7 @@ const initComment = (fastify, opts, done) => {
   fastify.route({
     method: HttpMethod.GET,
     url: CommentsApiPath.$ID,
-    [ControllerHook.HANDLER]: async req => commentService.getCommentById(req.params.id)
+    [ControllerHook.HANDLER]: async req => commentService.getById(req.params.id)
   });
   fastify.route({
     method: HttpMethod.POST,
@@ -23,7 +24,7 @@ const initComment = (fastify, opts, done) => {
     method: HttpMethod.PUT,
     url: CommentsApiPath.REACT,
     [ControllerHook.HANDLER]: async req => {
-      const reaction = await commentService.setCommentReaction(req.user.id, req.body);
+      const reaction = await commentService.setReaction(req.user.id, req.body);
 
       if (reaction && reaction.userId !== req.user.id && reaction.action === 'add') {
         // notify a user if someone (not himself) liked his comment
@@ -33,6 +34,19 @@ const initComment = (fastify, opts, done) => {
           .emit(NotificationSocketEvent[`${!req.body.isLike ? 'DIS' : ''}LIKE_COMMENT`], reaction);
       }
       return reaction;
+    }
+  });
+  fastify.route({
+    method: HttpMethod.DELETE,
+    url: CommentsApiPath.$ID,
+    [ControllerHook.HANDLER]: async (req, rep) => {
+      const { id } = req.params;
+
+      const isDeleted = await commentService.delete(Number(id));
+
+      return rep
+        .status(isDeleted ? HttpCode.OK : HttpCode.NOT_FOUND)
+        .send(isDeleted);
     }
   });
 

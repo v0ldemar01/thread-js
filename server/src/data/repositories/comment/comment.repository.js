@@ -8,7 +8,7 @@ class Comment extends Abstract {
     super(commentModel);
   }
 
-  getCommentById(id) {
+  getById(id) {
     return this.model
       .query()
       .select(
@@ -20,7 +20,7 @@ class Comment extends Abstract {
       .withGraphFetched('[user.image]');
   }
 
-  getCommentByIdWithUserAndReactions(id) {
+  getByIdWithUserAndReactions(id) {
     return this.model
       .query()
       .select(

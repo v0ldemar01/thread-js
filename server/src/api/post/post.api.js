@@ -1,4 +1,5 @@
 import {
+  HttpCode,
   HttpMethod,
   PostsApiPath,
   ControllerHook,
@@ -12,12 +13,12 @@ const initPost = (fastify, opts, done) => {
   fastify.route({
     method: HttpMethod.GET,
     url: PostsApiPath.ROOT,
-    [ControllerHook.HANDLER]: req => postService.getPosts(req.query)
+    [ControllerHook.HANDLER]: req => postService.getOnes(req.query)
   });
   fastify.route({
     method: HttpMethod.GET,
     url: PostsApiPath.$ID,
-    [ControllerHook.HANDLER]: req => postService.getPostById(req.params.id)
+    [ControllerHook.HANDLER]: req => postService.getById(req.params.id)
   });
   fastify.route({
     method: HttpMethod.POST,
@@ -35,7 +36,7 @@ const initPost = (fastify, opts, done) => {
     method: HttpMethod.PUT,
     url: PostsApiPath.$ID,
     [ControllerHook.HANDLER]: async req => {
-      const post = await postService.updatePost(req.params.id, req.body);
+      const post = await postService.update(req.params.id, req.body);
 
       return post;
     }
@@ -54,6 +55,18 @@ const initPost = (fastify, opts, done) => {
           .emit(NotificationSocketEvent[`${!req.body.isLike ? 'DIS' : ''}LIKE_POST`], reaction);
       }
       return reaction;
+    }
+  });
+  fastify.route({
+    method: HttpMethod.DELETE,
+    url: PostsApiPath.$ID,
+    [ControllerHook.HANDLER]: async (req, rep) => {
+      const { id } = req.params;
+      const isDeleted = await postService.delete(Number(id));
+
+      return rep
+        .status(isDeleted ? HttpCode.OK : HttpCode.NOT_FOUND)
+        .send(isDeleted);
     }
   });
 
