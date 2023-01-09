@@ -25,9 +25,10 @@ class Post extends Abstract {
         getPostReactionsQuery(this.model)(true),
         getPostReactionsQuery(this.model)(false)
       )
-      .where(getWhereUserIdByModeQuery(userId, userMode))
       .whereNull('deletedAt')
-      .withGraphJoined('[image, user.image, postReactions]')
+      .where(getWhereUserIdByModeQuery(userId, userMode))
+      .joinRelated('postReactions')
+      .withGraphJoined('[image, user.image]')
       .orderBy('createdAt', 'desc')
       .offset(offset)
       .limit(limit);
