@@ -1,11 +1,26 @@
 import { createReducer, isAnyOf } from '@reduxjs/toolkit';
-import { login, logout, register, loadCurrentUser } from './actions.js';
+import {
+  login,
+  logout,
+  register,
+  loadCurrentUser,
+  updateUserAvatar
+} from './actions.js';
 
 const initialState = {
   user: null
 };
 
 const reducer = createReducer(initialState, builder => {
+  builder.addCase(updateUserAvatar.fulfilled, (state, { payload }) => {
+    state.user = {
+      ...state.user,
+      image: {
+        ...state.user.image,
+        ...payload
+      }
+    };
+  });
   builder
     .addMatcher(
       isAnyOf(

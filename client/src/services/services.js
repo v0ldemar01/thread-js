@@ -7,6 +7,9 @@ import { Post } from './post/post.service.js';
 import { Socket } from './socket/socket.service.js';
 import { Storage } from './storage/storage.service.js';
 import { Notification } from './notification/notification.service.js';
+import {
+  ImageDataConverter
+} from './image-data-converter/image-data-converter.service.js';
 
 const storage = new Storage({
   storage: localStorage
@@ -31,9 +34,12 @@ const post = new Post({
   http
 });
 
+const imageDataConverter = new ImageDataConverter();
+
 const image = new Image({
   apiPath: ENV.API_PATH,
-  http
+  http,
+  imageDataConverter
 });
 
 const socket = new Socket();

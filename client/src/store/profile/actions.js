@@ -52,4 +52,11 @@ const loadCurrentUser = createAsyncThunk(
   }
 );
 
-export { login, register, logout, loadCurrentUser };
+const updateUserAvatar = createAsyncThunk(
+  ActionType.UPDATE_USER_AVATAR,
+  async (imageDataUrl, { extra: { services } }) => {
+    return services.image.uploadImageDataUrl(imageDataUrl);
+  }
+);
+
+export { login, register, logout, loadCurrentUser, updateUserAvatar };

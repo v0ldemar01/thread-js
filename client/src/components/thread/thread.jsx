@@ -11,11 +11,10 @@ import { threadActionCreator } from 'store/actions.js';
 import { image as imageService } from 'services/services.js';
 import { ThreadToolbarKey, UseFormMode } from 'common/enums/enums.js';
 import { Post, Spinner, Checkbox } from 'components/common/common.js';
-import { ExpandedPost, SharedPostLink, AddPost } from './components/components.js';
+import { ExpandedPost, SharedPostLink, AddPost, UpdatePost } from './components/components.js';
 import { DEFAULT_THREAD_TOOLBAR } from './common/constants.js';
 
 import styles from './styles.module.scss';
-import { UpdatePost } from './components/update-post/update-post.jsx';
 
 const postsFilter = {
   userId: undefined,

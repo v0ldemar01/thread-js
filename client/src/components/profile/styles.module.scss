@@ -12,3 +12,15 @@
   gap: 10px;
   border: none;
 }
+
+.cropContainer {
+  margin: 20px auto;
+  width: 400px;
+  height: 100%;
+}
+
+.avatarButtons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}

@@ -12,6 +12,7 @@ export { Message } from './message/message.jsx';
 export { Spinner } from './spinner/spinner.jsx';
 export { Tooltip } from './tooltip/tooltip.jsx';
 export { Checkbox } from './checkbox/checkbox.jsx';
+export { ImageCrop } from './image-crop/image-crop.jsx';
 export { IconButton } from './icon-button/icon-button.jsx';
 export { PublicRoute } from './public-route/public-route.jsx';
 export { UserReaction } from './user-reaction/user-reaction.jsx';
