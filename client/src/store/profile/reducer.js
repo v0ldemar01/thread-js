@@ -3,6 +3,7 @@ import {
   login,
   logout,
   register,
+  updateUser,
   loadCurrentUser,
   updateUserAvatar
 } from './actions.js';
@@ -19,6 +20,12 @@ const reducer = createReducer(initialState, builder => {
         ...state.user.image,
         ...payload
       }
+    };
+  });
+  builder.addCase(updateUser.fulfilled, (state, { payload }) => {
+    state.user = {
+      ...state.user,
+      ...payload
     };
   });
   builder

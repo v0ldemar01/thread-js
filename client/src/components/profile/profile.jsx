@@ -23,7 +23,7 @@ const Profile = () => {
     user: state.profile.user
   }));
 
-  const { control } = useAppForm({
+  const { control, isDirty, reset, handleSubmit } = useAppForm({
     defaultValues: {
       username: user.username,
       email: user.email
@@ -65,8 +65,18 @@ const Profile = () => {
       });
   }, [dispatch]);
 
+  const handleUpdateProfile = useCallback(values => {
+    dispatch(profileActionCreator.updateUser(
+      values
+    ));
+  }, [dispatch]);
+
   return (
-    <form name="profile" className={styles.profile}>
+    <form
+      name="profile"
+      className={styles.profile}
+      onSubmit={handleSubmit(handleUpdateProfile)}
+    >
       {!image && (
         <Button isBasic onClick={handleAvatarClick}>
           <Image
@@ -102,7 +112,7 @@ const Profile = () => {
         />
       </div>
       {Boolean(image) && (
-        <div className={styles.avatarButtons}>
+        <div className={styles.actions}>
           <Button
             type={ButtonType.BUTTON}
             onClick={handleCancelUpload}
@@ -130,18 +140,35 @@ const Profile = () => {
           iconName={IconName.USER}
           placeholder="Username"
           name="username"
-          value={user.username}
+          // value={user.username} // !
           control={control}
         />
         <Input
-          iconName={IconName.AT}
-          placeholder="Email"
+          disabled
           name="email"
           type="email"
-          value={user.email}
           control={control}
+          // value={user.email} // !
+          placeholder="Email"
+          iconName={IconName.AT}
         />
       </fieldset>
+      {isDirty && (
+        <div className={styles.actions}>
+          <Button
+            type={ButtonType.BUTTON}
+            onClick={() => reset()}
+          >
+            Cancel
+          </Button>
+          <Button
+            color={ButtonColor.TEAL}
+            type={ButtonType.SUBMIT}
+          >
+            Update profile
+          </Button>
+        </div>
+      )}
     </form>
   );
 };

@@ -5,7 +5,7 @@ import { joiResolver } from '@hookform/resolvers/joi';
 const useAppForm = ({ validationSchema, defaultValues, mode }) => {
   const {
     control,
-    formState: { errors },
+    formState: { errors, isDirty },
     reset,
     watch,
     handleSubmit
@@ -20,6 +20,7 @@ const useAppForm = ({ validationSchema, defaultValues, mode }) => {
     errors,
     reset,
     watch,
+    isDirty,
     handleSubmit
   };
 };

@@ -66,4 +66,15 @@ const updateUserAvatar = createAsyncThunk(
   }
 );
 
-export { login, register, logout, loadCurrentUser, updateUserAvatar };
+const updateUser = createAsyncThunk(
+  ActionType.UPDATE_USER,
+  async (payload, { getState, extra: { services } }) => {
+    const {
+      profile: { user: { id } }
+    } = getState();
+
+    return services.user.update(payload, id);
+  }
+);
+
+export { login, register, logout, loadCurrentUser, updateUser, updateUserAvatar };
