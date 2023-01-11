@@ -21,7 +21,7 @@ class Abstract {
     return this.#model.query().insert(data);
   }
 
-  updateById(id, data) {
+  update(id, data) {
     return this.#model.query().patchAndFetchById(id, data);
   }
 

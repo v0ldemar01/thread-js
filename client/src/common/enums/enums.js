@@ -3,7 +3,8 @@ export {
   AuthApiPath,
   CommentsApiPath,
   ImagesApiPath,
-  PostsApiPath
+  PostsApiPath,
+  UsersApiPath
 } from './api/api.js';
 export { AppRoute, ENV, StorageKey } from './app/app.js';
 export { ContentType } from './file/file.js';

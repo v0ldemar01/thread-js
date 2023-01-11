@@ -54,8 +54,15 @@ const loadCurrentUser = createAsyncThunk(
 
 const updateUserAvatar = createAsyncThunk(
   ActionType.UPDATE_USER_AVATAR,
-  async (imageDataUrl, { extra: { services } }) => {
-    return services.image.uploadImageDataUrl(imageDataUrl);
+  async (imageDataUrl, { getState, extra: { services } }) => {
+    const { id: imageId, link } = await services.image.uploadImageDataUrl(imageDataUrl);
+
+    const {
+      profile: { user: { id } }
+    } = getState();
+    await services.user.update({ imageId }, id);
+
+    return { id: imageId, link };
   }
 );
 

@@ -55,13 +55,6 @@ class Post extends Abstract {
           builder.whereNull('deletedAt');
         }
       })
-      // .modifyGraph('comments', builder => {
-      //   builder.select(
-      //     'comments.*',
-      //     getCommentReactionsQuery(this.model.relatedQuery('comments').modelClass())(true),
-      //     getCommentReactionsQuery(this.model.relatedQuery('comments').modelClass())(false)
-      //   );
-      // })
       .first();
   }
 
@@ -77,12 +70,6 @@ class Post extends Abstract {
         postReactions(withDislikes) as dislikes .[user]
       ]`)
       .first();
-  }
-
-  update(id, { imageId, body }) {
-    return this.model
-      .query()
-      .patchAndFetchById(id, { imageId, body });
   }
 }
 

@@ -5,6 +5,7 @@ import { initAuth } from './auth/auth.api.js';
 import { initComment } from './comment/comment.api.js';
 import { initImage } from './image/image.api.js';
 import { initPost } from './post/post.api.js';
+import { initUser } from './user/user.api.js';
 
 // register all routes
 const initApi = (
@@ -30,6 +31,12 @@ const initApi = (
       user
     },
     prefix: ApiPath.AUTH
+  });
+  fastify.register(initUser, {
+    services: {
+      user
+    },
+    prefix: ApiPath.USERS
   });
   fastify.register(initPost, {
     services: {

@@ -4,6 +4,7 @@ import { Comment } from './comment/comment.service.js';
 import { Http } from './http/http.service.js';
 import { Image } from './image/image.service.js';
 import { Post } from './post/post.service.js';
+import { User } from './user/user.service.js';
 import { Socket } from './socket/socket.service.js';
 import { Storage } from './storage/storage.service.js';
 import { Notification } from './notification/notification.service.js';
@@ -20,6 +21,11 @@ const http = new Http({
 });
 
 const auth = new Auth({
+  apiPath: ENV.API_PATH,
+  http
+});
+
+const user = new User({
   apiPath: ENV.API_PATH,
   http
 });
@@ -46,4 +52,4 @@ const socket = new Socket();
 
 const notification = new Notification();
 
-export { http, storage, auth, comment, post, image, socket, notification };
+export { http, storage, user, auth, comment, post, image, socket, notification };

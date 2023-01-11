@@ -8,6 +8,10 @@ class User {
 
     return user;
   }
+
+  update(id, user) {
+    return this._userRepository.update(id, { ...user });
+  }
 }
 
 export { User };

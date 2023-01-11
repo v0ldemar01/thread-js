@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import { http, storage, auth, comment, post, image, notification } from 'services/services.js';
+import { http, storage, user, auth, comment, post, image, notification } from 'services/services.js';
 import { profileReducer, threadReducer } from './root-reducer.js';
 import { notificationSocket } from './middlewares/middlewares.js';
 
@@ -16,6 +16,7 @@ const store = configureStore({
           http,
           storage,
           auth,
+          user,
           comment,
           post,
           image,
