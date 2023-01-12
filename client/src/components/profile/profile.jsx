@@ -5,7 +5,10 @@ import { ImageSize, IconName, ButtonColor, ButtonType } from 'common/enums/enums
 import { useRef, useState } from 'hooks/hooks.js';
 import { profileActionCreator } from 'store/actions.js';
 import { AvatarPreview } from './components/components.js';
-import { ALLOWED_FILE_TYPES } from './common/constants.js';
+import {
+  ALLOWED_FILE_TYPES,
+  DEFAULT_USER_PAYLOAD
+} from './common/constants.js';
 import styles from './styles.module.scss';
 
 const Profile = () => {
@@ -24,10 +27,12 @@ const Profile = () => {
   }));
 
   const { control, isDirty, reset, handleSubmit } = useAppForm({
-    defaultValues: {
-      username: user.username,
-      email: user.email
-    }
+    defaultValues: Object.fromEntries(
+      Object.keys(DEFAULT_USER_PAYLOAD).map(key => ([
+        key,
+        user[key]
+      ]))
+    )
   });
 
   const handleAvatarClick = () => {
@@ -56,6 +61,7 @@ const Profile = () => {
     dispatch(profileActionCreator.updateUserAvatar(
       previewCanvasRef.current.toDataURL()
     ))
+      .unwrap()
       .catch(() => {
         setErrorMessage('Error while uploading image');
       })
@@ -68,8 +74,10 @@ const Profile = () => {
   const handleUpdateProfile = useCallback(values => {
     dispatch(profileActionCreator.updateUser(
       values
-    ));
-  }, [dispatch]);
+    ))
+      .unwrap()
+      .finally(() => reset(user, { keepValues: true }));
+  }, [user, dispatch, reset]);
 
   return (
     <form
@@ -151,6 +159,12 @@ const Profile = () => {
           // value={user.email} // !
           placeholder="Email"
           iconName={IconName.AT}
+        />
+        <Input
+          name="status"
+          control={control}
+          // value={user.email} // !
+          placeholder="Status"
         />
       </fieldset>
       {isDirty && (

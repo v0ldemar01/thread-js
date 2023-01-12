@@ -44,11 +44,12 @@ const Input = ({
           />
         )}
       </div>
-      <span className={styles.errorWrapper}>
-        <ErrorMessage errors={errors} name={name} />
-      </span>
+      {Boolean(errors.name) && (
+        <span className={styles.errorWrapper}>
+          <ErrorMessage errors={errors} name={name} />
+        </span>
+      )}
     </div>
-
   );
 };
 

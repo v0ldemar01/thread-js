@@ -38,6 +38,18 @@
     background-color: var(--blue);
   }
 
+  &__small {
+    padding: 0.4rem 0.75rem;
+    line-height: 0.5rem;
+    font-size: 10px;
+  }
+
+  &__medium {
+    padding: 0.6rem 0.9rem;
+    line-height: 0.5rem;
+    font-size: 10px;
+  }
+
   &.loading {
     position: relative;
     cursor: default;

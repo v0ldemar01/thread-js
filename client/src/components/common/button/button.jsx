@@ -5,7 +5,8 @@ import {
   ButtonColor,
   ButtonType,
   IconName,
-  IconSize
+  IconSize,
+  ButtonSize
 } from 'common/enums/enums.js';
 import { Icon } from 'components/common/common.js';
 import styles from './styles.module.scss';
@@ -14,6 +15,7 @@ const Button = ({
   onClick,
   className,
   type,
+  size,
   color,
   iconName,
   iconSize,
@@ -37,6 +39,7 @@ const Button = ({
         isBasic && styles.basic,
         isPrimary && styles.primary,
         color && styles[`btn__${color}`],
+        size && styles[`btn__${size}`],
         className
       )}
       type={type}
@@ -59,7 +62,8 @@ Button.propTypes = {
   isFluid: PropTypes.bool,
   isLoading: PropTypes.bool,
   isPrimary: PropTypes.bool,
-  isDisabled: PropTypes.bool
+  isDisabled: PropTypes.bool,
+  size: PropTypes.oneOf(Object.values(ButtonSize))
 };
 
 Button.defaultProps = {
@@ -74,7 +78,8 @@ Button.defaultProps = {
   isFluid: false,
   isLoading: false,
   isPrimary: false,
-  isDisabled: false
+  isDisabled: false,
+  size: null
 };
 
 export { Button };
