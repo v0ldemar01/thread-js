@@ -4,7 +4,9 @@ const AppRoute = {
   LOGIN: '/login',
   REGISTRATION: '/registration',
   PROFILE: '/profile',
-  SHARE_$POSTHASH: '/share/:postHash'
+  SHARE_$POSTHASH: '/share/:postHash',
+  SET_PASSWORD: '/password/set',
+  RESET_PASSWORD: '/password/reset'
 };
 
 export { AppRoute };

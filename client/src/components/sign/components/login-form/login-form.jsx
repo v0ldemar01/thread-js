@@ -76,6 +76,10 @@ const LoginForm = ({ onLogin }) => {
         <span>New to us?</span>
         <NavLink to={AppRoute.REGISTRATION}>Sign Up</NavLink>
       </Message>
+      <Message>
+        <span>Forgot password?</span>
+        <NavLink exact to={AppRoute.RESET_PASSWORD}>Reset password</NavLink>
+      </Message>
     </>
   );
 };

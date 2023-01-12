@@ -13,6 +13,7 @@ import {
 import { Sign } from 'components/sign/sign';
 import { NotFound } from 'components/not-found/not-found';
 import { Profile } from 'components/profile/profile';
+import { Password } from 'components/password/password';
 import { SharedPost } from 'components/shared-post/shared-post';
 import { Thread } from 'components/thread/thread';
 
@@ -50,6 +51,8 @@ const App = () => {
         <Routes>
           <Route path={AppRoute.LOGIN} element={<PublicRoute component={Sign} />} />
           <Route path={AppRoute.REGISTRATION} element={<PublicRoute component={Sign} />} />
+          <Route path={AppRoute.RESET_PASSWORD} element={<PublicRoute component={Password} />} />
+          <Route path={AppRoute.SET_PASSWORD} element={<PublicRoute component={Password} />} />
           <Route path={AppRoute.ROOT} element={<PrivateRoute component={Thread} />} />
           <Route path={AppRoute.PROFILE} element={<PrivateRoute component={Profile} />} />
           <Route path={AppRoute.SHARE_$POSTHASH} element={<PrivateRoute component={SharedPost} />} />

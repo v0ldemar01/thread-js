@@ -10,6 +10,9 @@ const getErrorStatusCode = err => {
     case ExceptionName.INVALID_CREDENTIALS: {
       return HttpCode.UNAUTHORIZED;
     }
+    case ExceptionName.USERS: {
+      return HttpCode.NOT_FOUND;
+    }
     default: {
       return HttpCode.INTERNAL_SERVER_ERROR;
     }

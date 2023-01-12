@@ -9,6 +9,12 @@ class User {
     return user;
   }
 
+  async getUserByEmail(email) {
+    const user = await this._userRepository.getByEmail(email);
+
+    return user;
+  }
+
   update(id, user) {
     return this._userRepository.update(id, { ...user });
   }

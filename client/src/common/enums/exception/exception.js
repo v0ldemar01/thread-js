@@ -1,1 +1,5 @@
-export { ExceptionMessage } from 'shared/src/common/enums/enums.js';
+export {
+  ExceptionMessage,
+  UserValidationRule,
+  UserValidationMessage
+} from 'shared/src/common/enums/enums.js';

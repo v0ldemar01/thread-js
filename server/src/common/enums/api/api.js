@@ -4,6 +4,7 @@ export {
   CommentsApiPath,
   ImagesApiPath,
   PostsApiPath,
-  UsersApiPath
+  UsersApiPath,
+  PasswordApiPath
 } from 'shared/src/common/enums/enums.js';
 export { ControllerHook } from './controller-hook.enum.js';

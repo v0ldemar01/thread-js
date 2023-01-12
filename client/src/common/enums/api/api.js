@@ -4,5 +4,6 @@ export {
   CommentsApiPath,
   ImagesApiPath,
   PostsApiPath,
-  UsersApiPath
+  UsersApiPath,
+  PasswordApiPath
 } from 'shared/src/common/enums/enums.js';

@@ -1,4 +1,6 @@
 export {
   login,
-  registration
+  registration,
+  resetPassword,
+  setWithTokenPassword
 } from 'shared/src/validation-schemas/validation-schemas.js';

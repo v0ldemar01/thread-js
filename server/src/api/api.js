@@ -6,11 +6,12 @@ import { initComment } from './comment/comment.api.js';
 import { initImage } from './image/image.api.js';
 import { initPost } from './post/post.api.js';
 import { initUser } from './user/user.api.js';
+import { initPassword } from './password/password.api.js';
 
 // register all routes
 const initApi = (
   fastify,
-  { services: { auth, user, comment, post, image } },
+  { services: { auth, user, comment, post, image, password } },
   done
 ) => {
   fastify.setValidatorCompiler(({ schema }) => {
@@ -24,13 +25,18 @@ const initApi = (
     },
     routesWhiteList: WHITE_ROUTES
   });
-
   fastify.register(initAuth, {
     services: {
       auth,
       user
     },
     prefix: ApiPath.AUTH
+  });
+  fastify.register(initPassword, {
+    services: {
+      password
+    },
+    prefix: ApiPath.PASSWORD
   });
   fastify.register(initUser, {
     services: {

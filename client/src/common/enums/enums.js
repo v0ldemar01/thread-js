@@ -4,7 +4,8 @@ export {
   CommentsApiPath,
   ImagesApiPath,
   PostsApiPath,
-  UsersApiPath
+  UsersApiPath,
+  PasswordApiPath
 } from './api/api.js';
 export { AppRoute, ENV, StorageKey } from './app/app.js';
 export { ContentType } from './file/file.js';
@@ -14,7 +15,11 @@ export { PostPayloadKey } from './post/post.js';
 export { UseFormMode } from './form/form.js';
 export { ThreadToolbarKey } from './thread/thread.js';
 export { CommentPayloadKey } from './comment/comment.js';
-export { ExceptionMessage } from './exception/exception.js';
+export {
+  ExceptionMessage,
+  UserValidationRule,
+  UserValidationMessage
+} from './exception/exception.js';
 export {
   ButtonColor,
   ButtonSize,

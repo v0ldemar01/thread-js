@@ -11,6 +11,7 @@ import { Notification } from './notification/notification.service.js';
 import {
   ImageDataConverter
 } from './image-data-converter/image-data-converter.service.js';
+import { Password } from './password/password.service.js';
 
 const storage = new Storage({
   storage: localStorage
@@ -40,6 +41,11 @@ const post = new Post({
   http
 });
 
+const password = new Password({
+  apiPath: ENV.API_PATH,
+  http
+});
+
 const imageDataConverter = new ImageDataConverter();
 
 const image = new Image({
@@ -52,4 +58,4 @@ const socket = new Socket();
 
 const notification = new Notification();
 
-export { http, storage, user, auth, comment, post, image, socket, notification };
+export { http, storage, user, auth, comment, password, post, image, socket, notification };

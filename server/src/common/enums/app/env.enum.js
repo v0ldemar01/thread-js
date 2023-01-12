@@ -12,7 +12,9 @@ const {
   DB_PORT,
   DB_CLIENT,
   GYAZO_UPLOAD_API_URL,
-  GYAZO_ACCESS_TOKEN
+  GYAZO_ACCESS_TOKEN,
+  EMAIL_USERNAME,
+  EMAIL_PASSWORD
 } = process.env;
 
 const ENV = {
@@ -37,6 +39,13 @@ const ENV = {
     ACCESS_KEY: GYAZO_ACCESS_TOKEN,
     UPLOAD_API_URL: GYAZO_UPLOAD_API_URL,
     FILE_SIZE: 10000000
+  },
+  EMAIL: {
+    HOST: 'mail.binary-studio.com',
+    PORT: 465,
+    SECURE: true,
+    USERNAME: String(EMAIL_USERNAME),
+    PASSWORD: String(EMAIL_PASSWORD)
   }
 };
 

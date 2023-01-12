@@ -4,6 +4,7 @@ const ExceptionMessage = {
   INCORRECT_EMAIL: 'Incorrect email.',
   INVALID_TOKEN: 'Token is invalid.',
   PASSWORDS_NOT_MATCH: 'Passwords do not match.',
+  USER_NOT_FOUND_BY_EMAIL: 'User was not found by email',
   USERNAME_ALREADY_EXISTS: 'Username is already taken.'
 };
 
