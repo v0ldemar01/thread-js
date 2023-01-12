@@ -30,7 +30,7 @@ class Comment {
     let action;
     const updateOrDelete = react => (react.isLike === isLike
       ? (action = 'remove', this._commentReactionRepository.deleteById(react.id))
-      : (action = 'add', this._commentReactionRepository.updateById(react.id, { isLike })));
+      : (action = 'add', this._commentReactionRepository.update(react.id, { isLike })));
 
     const reaction = await this._commentReactionRepository.getCommentReaction(
       userId,

@@ -34,7 +34,7 @@ class Post {
     let action;
     const updateOrDelete = react => (react.isLike === isLike
       ? (action = 'remove', this._postReactionRepository.deleteById(react.id))
-      : (action = 'add', this._postReactionRepository.updateById(react.id, { isLike })));
+      : (action = 'add', this._postReactionRepository.update(react.id, { isLike })));
 
     const reaction = await this._postReactionRepository.getReaction(
       userId,
