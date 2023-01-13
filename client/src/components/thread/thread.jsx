@@ -9,7 +9,7 @@ import {
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { threadActionCreator } from 'store/actions.js';
 import { image as imageService } from 'services/services.js';
-import { ThreadToolbarKey, UseFormMode } from 'common/enums/enums.js';
+import { ThreadToolbarKey, UseFormMode, PostUserMode } from 'common/enums/enums.js';
 import { Post, Spinner, Checkbox } from 'components/common/common.js';
 import { ExpandedPost, SharedPostLink, AddPost, UpdatePost } from './components/components.js';
 import { DEFAULT_THREAD_TOOLBAR } from './common/constants.js';
@@ -20,7 +20,7 @@ const postsFilter = {
   userId: undefined,
   from: 0,
   count: 10,
-  userMode: 'all'
+  userMode: PostUserMode.ALL
 };
 
 const Thread = () => {
@@ -51,7 +51,7 @@ const Thread = () => {
     () => {
       postsFilter.userId = showOwnPosts ? userId : undefined;
       postsFilter.from = 0;
-      postsFilter.userMode = showOwnPosts ? 'include' : 'all';
+      postsFilter.userMode = showOwnPosts ? PostUserMode.INCLUDE : PostUserMode.ALL;
       handlePostsLoad(postsFilter);
       postsFilter.from = postsFilter.count; // for the next scroll
     },
@@ -62,7 +62,7 @@ const Thread = () => {
     () => {
       postsFilter.userId = hideOwnPosts ? userId : undefined;
       postsFilter.from = 0;
-      postsFilter.userMode = hideOwnPosts ? 'exclude' : 'all';
+      postsFilter.userMode = hideOwnPosts ? PostUserMode.EXCLUDE : PostUserMode.ALL;
       handlePostsLoad(postsFilter);
       postsFilter.from = postsFilter.count; // for the next scroll
     },
@@ -73,7 +73,7 @@ const Thread = () => {
     () => {
       postsFilter.userId = showLikedByOwnPosts ? userId : undefined;
       postsFilter.from = 0;
-      postsFilter.userMode = showLikedByOwnPosts ? 'likedByOwn' : 'all';
+      postsFilter.userMode = showLikedByOwnPosts ? PostUserMode.LIKED_BY_OWN : PostUserMode.ALL;
       handlePostsLoad(postsFilter);
       postsFilter.from = postsFilter.count; // for the next scroll
     },

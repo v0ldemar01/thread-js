@@ -10,6 +10,7 @@ export {
 } from './api/api.js';
 export { ENV, ExitCode } from './app/app.js';
 export { UserPayloadKey } from './user/user.js';
+export { PostUserMode } from './post/post.js';
 export { DbTableName } from './database/database.js';
 export {
   ExceptionName,

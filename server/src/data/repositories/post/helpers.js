@@ -1,3 +1,5 @@
+import { PostUserMode } from '../../../common/enums/enums.js';
+
 const getCommentsCountQuery = model => model.relatedQuery('comments').count().as('commentCount');
 
 const getReactionsQuery = model => isLike => {
@@ -10,14 +12,14 @@ const getReactionsQuery = model => isLike => {
 };
 
 const getWhereUserIdByModeQuery = (userId, userMode) => builder => {
-  if (userMode === 'include' && userId) {
+  if (userMode === PostUserMode.INCLUDE && userId) {
     builder.where('posts.userId', userId);
     return;
   }
-  if (userMode === 'exclude' && userId) {
+  if (userMode === PostUserMode.EXCLUDE && userId) {
     builder.whereNot('posts.userId', userId);
   }
-  if (userMode === 'likedByOwn' && userId) {
+  if (userMode === PostUserMode.LIKED_BY_OWN && userId) {
     builder
       .where('likes.userId', userId);
   }
