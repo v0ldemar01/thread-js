@@ -1,34 +1,28 @@
 import {
+  ApiPath,
   HttpMethod,
-  UsersApiPath,
-  ControllerHook
+  UsersApiPath
 } from '../../common/enums/enums.js';
+import { getFullUrl } from '../../helpers/helpers.js';
 import { Controller } from '../abstract/abstract.controller.js';
 
-class User extends Controller {
+const initUser = ({ server }) => class User extends Controller {
   #userService;
 
-  constructor({ app, apiPath, userService }) {
-    super({
-      app,
-      apiPath
-    });
+  constructor({ apiPath, userService }) {
+    super({ apiPath });
     this.#userService = userService;
   }
 
-  initRoutes = () => {
-    [{
-      method: HttpMethod.PUT,
-      url: UsersApiPath.$ID,
-      [ControllerHook.HANDLER]: this.getById
-    }].forEach(this.route);
-  };
-
-  getById = async req => {
+  @server.route({
+    method: HttpMethod.PUT,
+    url: getFullUrl(ApiPath.USERS, UsersApiPath.$ID),
+  })
+  async update(req) {
     const user = await this.#userService.update(req.params.id, req.body);
 
     return user;
   };
 }
 
-export { User };
+export { initUser };

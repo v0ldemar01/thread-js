@@ -1,56 +1,34 @@
 import {
+  ApiPath,
   HttpMethod,
-  AuthApiPath,
-  ControllerHook
+  AuthApiPath
 } from '../../common/enums/enums.js';
-import { getErrorStatusCode } from '../../helpers/helpers.js';
+import { getErrorStatusCode, getFullUrl } from '../../helpers/helpers.js';
 import {
   login as loginValidationSchema,
   registration as registrationValidationSchema
 } from '../../validation-schemas/validation-schemas.js';
 import { Controller } from '../abstract/abstract.controller.js';
 
-class Auth extends Controller {
+const initAuth = ({ server }) => class Auth extends Controller {
   #authService;
 
   #userService;
 
-  constructor({ app, apiPath, authService, userService }) {
-    super({
-      app,
-      apiPath
-    });
+  constructor({ apiPath, authService, userService }) {
+    super({ apiPath });
     this.#authService = authService;
     this.#userService = userService;
   }
 
-  initRoutes = () => {
-    [
-      {
-        method: HttpMethod.POST,
-        url: AuthApiPath.LOGIN,
-        schema: {
-          body: loginValidationSchema
-        },
-        [ControllerHook.HANDLER]: this.login
-      },
-      {
-        method: HttpMethod.POST,
-        url: AuthApiPath.REGISTER,
-        schema: {
-          body: registrationValidationSchema
-        },
-        [ControllerHook.HANDLER]: this.register
-      },
-      {
-        method: HttpMethod.GET,
-        url: AuthApiPath.USER,
-        [ControllerHook.HANDLER]: this.getUser
-      }
-    ].forEach(this.route);
-  };
-
-  login = async (req, res) => {
+  @server.route({
+    method: HttpMethod.POST,
+    url: getFullUrl(ApiPath.AUTH, AuthApiPath.LOGIN),
+    schema: {
+      body: loginValidationSchema
+    }
+  })
+  async login(req, res) {
     try {
       const user = await this.#authService.verifyLoginCredentials(req.body);
       return await this.#authService.login(user);
@@ -59,7 +37,14 @@ class Auth extends Controller {
     }
   };
 
-  register = async (req, res) => {
+  @server.route({
+    method: HttpMethod.POST,
+    url: getFullUrl(ApiPath.AUTH, AuthApiPath.REGISTER),
+    schema: {
+      body: registrationValidationSchema
+    }
+  })
+  async register(req, res) {
     try {
       return await this.#authService.register(req.body);
     } catch (err) {
@@ -67,7 +52,13 @@ class Auth extends Controller {
     }
   };
 
-  getUser = async req => this.#userService.getUserById(req.user.id);
+  @server.route({
+    method: HttpMethod.GET,
+    url: getFullUrl(ApiPath.AUTH, AuthApiPath.USER),
+  })
+  async getUser(req) {
+    return this.#userService.getUserById(req.user.id)
+  };
 }
 
-export { Auth };
+export { initAuth };
